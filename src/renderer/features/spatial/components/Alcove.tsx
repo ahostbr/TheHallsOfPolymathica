@@ -5,6 +5,11 @@ import { Html } from '@react-three/drei'
 import { HoloGlassPanel } from './HoloGlassPanel'
 import { HoloText } from './HoloText'
 import { PolymathPortrait } from './PolymathPortrait'
+import { PolymathBust } from './PolymathBust'
+
+const POLYMATH_MODELS: Record<string, string> = {
+  davinci: 'models/davinci.glb',
+}
 import { useHallStore } from '../store/hallStore'
 import { getAlcoveCameraTarget } from '../constants/layout'
 import { PALETTE } from '../constants/palette'
@@ -151,6 +156,18 @@ export function Alcove({
           color={color}
         />
       </Suspense>
+
+      {/* 3D Bust (if model exists for this polymath) */}
+      {POLYMATH_MODELS[polymathId] && (
+        <Suspense fallback={null}>
+          <PolymathBust
+            modelPath={POLYMATH_MODELS[polymathId]}
+            position={[0.9, -0.1, 0.2]}
+            scale={0.8}
+            color={color}
+          />
+        </Suspense>
+      )}
 
       {/* Embedded terminal (only when alcove is active) */}
       {showTerminal && activeSessionId && (
