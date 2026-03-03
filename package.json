@@ -1,0 +1,90 @@
+{
+  "name": "the-halls-of-polymathica",
+  "version": "1.0.0",
+  "description": "A spatial knowledge environment where you walk through a 3D holographic hallway and engage with history's greatest thinkers",
+  "type": "module",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "dist": "electron-vite build && electron-builder --win",
+    "dist:dir": "electron-vite build && electron-builder --win --dir",
+    "typecheck": "tsc --noEmit -p tsconfig.node.json && tsc --noEmit -p tsconfig.web.json",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "build": {
+    "appId": "com.polymathica.halls",
+    "productName": "The Halls of Polymathica",
+    "directories": {
+      "output": "dist"
+    },
+    "npmRebuild": false,
+    "files": [
+      "out/**/*",
+      "node_modules/**/*",
+      "!node_modules/*/{test,tests,__tests__,docs,example,examples}/**",
+      "!node_modules/.cache/**"
+    ],
+    "win": {
+      "target": ["nsis"],
+      "icon": "resources/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    },
+    "asar": true,
+    "asarUnpack": [
+      "node_modules/node-pty/**/*"
+    ]
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.0.0",
+    "@react-three/fiber": "^9.0.0",
+    "@react-three/postprocessing": "^3.0.0",
+    "@xterm/addon-fit": "^0.10.0",
+    "@xterm/xterm": "^5.5.0",
+    "better-sqlite3": "^12.6.2",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.474.0",
+    "node-pty": "^1.0.0",
+    "postprocessing": "^6.36.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwind-merge": "^3.0.1",
+    "three": "^0.172.0",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@electron/rebuild": "^4.0.3",
+    "@tailwindcss/postcss": "^4.0.6",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^22.13.2",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "@types/three": "^0.172.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "electron": "^34.0.2",
+    "electron-builder": "^26.7.0",
+    "electron-vite": "^3.0.0",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^4.0.6",
+    "typescript": "^5.7.3",
+    "vite": "^6.0.0",
+    "vitest": "^3.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "better-sqlite3",
+      "electron",
+      "electron-winstaller",
+      "esbuild",
+      "node-pty"
+    ]
+  }
+}
