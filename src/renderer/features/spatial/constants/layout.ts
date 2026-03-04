@@ -39,7 +39,7 @@ export const CAMERA_FAR = 100
 // Navigation depths
 export const ALCOVE_VIEW_DISTANCE = 2 // approach distance from center (10 units from wall)
 export const CONVERSATION_VIEW_DISTANCE = 4 // closer for terminal interaction
-export const WING_VIEW_DISTANCE = 8
+export const WING_VIEW_DISTANCE = 12
 
 // Flight duration
 export const DEFAULT_FLIGHT_DURATION = 5

@@ -17,8 +17,6 @@ interface AlcoveProps {
   name: string
   title: string | null
   color: string
-  ring: number
-  index: number
   position: Vector3Tuple
   rotation: Vector3Tuple
   totalSessions: number
@@ -29,8 +27,6 @@ export function Alcove({
   name,
   title,
   color,
-  ring,
-  index,
   position,
   rotation,
 }: AlcoveProps) {

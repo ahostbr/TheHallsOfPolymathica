@@ -5,6 +5,7 @@ import {
   ROTUNDA_CAMERA_LOOK,
   DEFAULT_FLIGHT_DURATION,
   WING_VIEW_DISTANCE,
+  CORRIDOR_LENGTH,
 } from '../constants/layout'
 import type { WingId } from '../constants/wings'
 import { WINGS, getWingForPolymath } from '../constants/wings'
@@ -125,7 +126,28 @@ export const useHallStore = create<HallState>((set, get) => ({
     set({ activePolymathId: null, corridorProgress: 0 })
   },
 
-  arriveAtAlcove: () => set({ depth: 'alcove' }),
+  arriveAtAlcove: () => {
+    const { activeWing } = get()
+    if (!activeWing) {
+      set({ depth: 'alcove' })
+      return
+    }
+    const wing = WINGS[activeWing]
+    const len = Math.sqrt(wing.archPosition[0] ** 2 + wing.archPosition[2] ** 2)
+    const dx = wing.archPosition[0] / len
+    const dz = wing.archPosition[2] / len
+
+    // Camera stays where spline ended
+    const camDist = len + CORRIDOR_LENGTH - 8
+    // Look at alcove wall a few units further
+    const lookDist = len + CORRIDOR_LENGTH - 3
+
+    set({
+      depth: 'alcove',
+      cameraTarget: [dx * camDist, 1.5, dz * camDist],
+      cameraLookAt: [dx * lookDist, 1.5, dz * lookDist],
+    })
+  },
 
   enterConversation: (sessionId) => set({ activeSessionId: sessionId }),
 

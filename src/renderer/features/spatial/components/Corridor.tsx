@@ -1,8 +1,9 @@
 import { useMemo } from 'react'
 import { CorridorPanel } from './CorridorPanel'
 import { CorridorFloor } from './CorridorFloor'
+import { HoloGlassPanel } from './HoloGlassPanel'
 import { useCorridorContent } from '../hooks/useCorridorContent'
-import { CORRIDOR_PANEL_SPACING } from '../constants/layout'
+import { CORRIDOR_PANEL_SPACING, CORRIDOR_LENGTH, CORRIDOR_WIDTH, CORRIDOR_HEIGHT } from '../constants/layout'
 import { getWingForPolymath, WINGS } from '../constants/wings'
 
 interface CorridorProps {
@@ -74,6 +75,12 @@ export function Corridor({ polymathId, color, direction, origin }: CorridorProps
   // but we need the opposite facing, so add PI.
   const angle = Math.atan2(direction[0], direction[2]) + Math.PI
 
+  // Dynamic spacing: fit all panels before the end wall with clearance
+  const usableLength = CORRIDOR_LENGTH - 7
+  const effectiveSpacing = panels.length > 0
+    ? usableLength / (panels.length * 0.5 + 1)
+    : CORRIDOR_PANEL_SPACING
+
   return (
     <group position={origin} rotation={[0, angle, 0]}>
       <CorridorFloor color={color} />
@@ -81,13 +88,20 @@ export function Corridor({ polymathId, color, direction, origin }: CorridorProps
         <CorridorPanel
           key={i}
           side={panel.side}
-          zPosition={-CORRIDOR_PANEL_SPACING * (i * 0.5 + 1)}
+          zPosition={-effectiveSpacing * (i * 0.5 + 1)}
           title={panel.title}
           content={panel.content}
           color={wingColor}
           revealAt={(i + 1) / (panels.length + 1)}
         />
       ))}
+      {/* End wall at far end of corridor */}
+      <HoloGlassPanel
+        width={CORRIDOR_WIDTH + 1}
+        height={CORRIDOR_HEIGHT}
+        position={[0, CORRIDOR_HEIGHT / 2, -(CORRIDOR_LENGTH - 2)]}
+        edgeColor={wingColor}
+      />
     </group>
   )
 }
