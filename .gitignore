@@ -1,2 +1,4 @@
 node_modules/\nout/\ndist/\n.env\n*.log
 /node_modules
+/tests
+/docs
