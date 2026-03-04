@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useThree } from '@react-three/fiber'
 import { useHallStore } from '../store/hallStore'
 import { Alcove } from './Alcove'
 import { CameraController } from './CameraController'
@@ -17,6 +18,7 @@ const DEFAULT_COLORS = [
 export function HallLayout() {
   const polymaths = useHallStore((s) => s.polymaths)
   const setPolymaths = useHallStore((s) => s.setPolymaths)
+  const { invalidate } = useThree()
 
   // Load polymaths from database on mount
   useEffect(() => {
@@ -38,12 +40,13 @@ export function HallLayout() {
           }
         })
         setPolymaths(data)
+        invalidate()
       } catch (err) {
         console.error('Failed to load polymaths:', err)
       }
     }
     loadPolymaths()
-  }, [setPolymaths])
+  }, [setPolymaths, invalidate])
 
   return (
     <>

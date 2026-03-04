@@ -1,19 +1,18 @@
-import { useRef, useCallback, useMemo, Suspense } from 'react'
+import { useRef, useCallback, Suspense } from 'react'
 import type { Group, Vector3Tuple } from 'three'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useThree } from '@react-three/fiber'
 import { Html } from '@react-three/drei'
 import { HoloGlassPanel } from './HoloGlassPanel'
 import { HoloText } from './HoloText'
 import { PolymathPortrait } from './PolymathPortrait'
 import { PolymathBust } from './PolymathBust'
+import { useHallStore } from '../store/hallStore'
+import { getAlcoveCameraTarget } from '../constants/layout'
+import { TerminalInstance } from '@/components/terminal/TerminalInstance'
 
 const POLYMATH_MODELS: Record<string, string> = {
   davinci: 'models/davinci.glb',
 }
-import { useHallStore } from '../store/hallStore'
-import { getAlcoveCameraTarget } from '../constants/layout'
-import { PALETTE } from '../constants/palette'
-import { TerminalInstance } from '@/components/terminal/TerminalInstance'
 
 interface AlcoveProps {
   polymathId: string
@@ -36,7 +35,6 @@ export function Alcove({
   index,
   position,
   rotation,
-  totalSessions,
 }: AlcoveProps) {
   const groupRef = useRef<Group>(null)
   const { invalidate } = useThree()
@@ -47,16 +45,15 @@ export function Alcove({
   const enterConversation = useHallStore((s) => s.enterConversation)
 
   const isActive = activePolymathId === polymathId
-  const isHallView = depth === 'hall'
   const showTerminal = isActive && (depth === 'alcove' || depth === 'conversation')
+  const modelPath = POLYMATH_MODELS[polymathId]
 
   const handleClick = useCallback(() => {
-    if (depth === 'hall') {
-      const { position: camPos, lookAt } = getAlcoveCameraTarget(ring, index)
-      navigateToAlcove(polymathId, camPos, lookAt)
-      invalidate()
-    }
-  }, [depth, ring, index, polymathId, navigateToAlcove, invalidate])
+    if (isActive) return // already viewing this alcove
+    const { position: camPos, lookAt } = getAlcoveCameraTarget(ring, index)
+    navigateToAlcove(polymathId, camPos, lookAt)
+    invalidate()
+  }, [isActive, ring, index, polymathId, navigateToAlcove, invalidate])
 
   const handleSpawnTerminal = useCallback(async () => {
     if (activeSessionId) return
@@ -68,9 +65,6 @@ export function Alcove({
     }
   }, [polymathId, activeSessionId, enterConversation])
 
-  // Glow intensity based on state
-  const glowIntensity = isActive ? 1.5 : 0.5
-
   return (
     <group
       ref={groupRef}
@@ -78,27 +72,40 @@ export function Alcove({
       rotation={rotation}
       onClick={handleClick}
     >
-      {/* Alcove background panel */}
+      {/* Glass panel backdrop */}
       <HoloGlassPanel
-        width={3.2}
+        width={2.6}
         height={3.0}
-        position={[0, 0, -0.1]}
-        color={isActive ? '#0f2a40' : '#0a1628'}
+        position={[0, 0, 0]}
         edgeColor={color}
       />
 
-      {/* Point light for polymath glow */}
-      <pointLight
-        position={[0, 0, 0.5]}
-        intensity={glowIntensity}
-        color={color}
-        distance={4}
-        decay={2}
-      />
+      {/* 2D portrait */}
+      <Suspense fallback={null}>
+        <PolymathPortrait
+          polymathId={polymathId}
+          width={1.8}
+          height={2.0}
+          position={[0, 0.2, 0.05]}
+          color={color}
+        />
+      </Suspense>
+
+      {/* 3D bust (only davinci has a model) */}
+      {modelPath && (
+        <Suspense fallback={null}>
+          <PolymathBust
+            modelPath={modelPath}
+            position={[0, 0.2, 0.3]}
+            scale={0.8}
+            color={color}
+          />
+        </Suspense>
+      )}
 
       {/* Name label */}
       <HoloText
-        position={[0, 1.2, 0.05]}
+        position={[0, -1.3, 0.05]}
         fontSize={0.18}
         color={color}
         glowColor={color}
@@ -106,67 +113,16 @@ export function Alcove({
         {name}
       </HoloText>
 
-      {/* Title */}
+      {/* Title label */}
       {title && (
         <HoloText
-          position={[0, 0.95, 0.05]}
-          fontSize={0.09}
-          color={PALETTE.textSecondary}
+          position={[0, -1.55, 0.05]}
+          fontSize={0.1}
+          color={color}
           glowColor={color}
         >
           {title}
         </HoloText>
-      )}
-
-      {/* Session count badge */}
-      {totalSessions > 0 && (
-        <HoloText
-          position={[1.3, 1.2, 0.05]}
-          fontSize={0.08}
-          color={PALETTE.textSecondary}
-          glowColor={color}
-        >
-          {`${totalSessions} sessions`}
-        </HoloText>
-      )}
-
-      {/* Portrait */}
-      <Suspense
-        fallback={
-          <HoloGlassPanel
-            width={1.4}
-            height={1.6}
-            position={[0, 0, 0.05]}
-            color={color + '22'}
-            edgeColor={color}
-          >
-            <HoloText
-              position={[0, 0, 0.02]}
-              fontSize={0.5}
-              color={color}
-              glowColor={color}
-            >
-              {name.charAt(0)}
-            </HoloText>
-          </HoloGlassPanel>
-        }
-      >
-        <PolymathPortrait
-          polymathId={polymathId}
-          color={color}
-        />
-      </Suspense>
-
-      {/* 3D Bust (if model exists for this polymath) */}
-      {POLYMATH_MODELS[polymathId] && (
-        <Suspense fallback={null}>
-          <PolymathBust
-            modelPath={POLYMATH_MODELS[polymathId]}
-            position={[0.9, -0.1, 0.2]}
-            scale={0.8}
-            color={color}
-          />
-        </Suspense>
       )}
 
       {/* Embedded terminal (only when alcove is active) */}

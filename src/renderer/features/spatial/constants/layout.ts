@@ -14,15 +14,15 @@ export const ALCOVE_HEIGHT = 3.0
 export const ALCOVE_DEPTH = 2.0
 
 // Camera
-export const CAMERA_POSITION: Vector3Tuple = [0, 0.5, 0]
+export const CAMERA_POSITION: Vector3Tuple = [0, 1.5, 0.01]
 export const CAMERA_FOV = 65
 export const CAMERA_NEAR = 0.1
 export const CAMERA_FAR = 100
 
 // Navigation depths
 export const HALL_VIEW_DISTANCE = 0       // camera at origin
-export const ALCOVE_VIEW_DISTANCE = 8.5   // approach distance from center
-export const CONVERSATION_VIEW_DISTANCE = 10 // close to alcove
+export const ALCOVE_VIEW_DISTANCE = 2     // approach distance from center (10 units from wall)
+export const CONVERSATION_VIEW_DISTANCE = 4 // closer for terminal interaction
 
 // Panel sizes within an alcove
 export const PORTRAIT_WIDTH = 1.8

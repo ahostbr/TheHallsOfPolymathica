@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useHallStore } from '@/features/spatial/store/hallStore'
 
 export function HallHUD() {
@@ -8,6 +9,18 @@ export function HallHUD() {
   const exitConversation = useHallStore((s) => s.exitConversation)
 
   const activePolymath = polymaths.find((p) => p.id === activePolymathId)
+
+  // ESC key goes back one depth level
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        if (depth === 'conversation') exitConversation()
+        else if (depth === 'alcove') navigateToHall()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [depth, navigateToHall, exitConversation])
 
   return (
     <div className="fixed inset-x-0 top-0 z-50 pointer-events-none">
@@ -38,38 +51,35 @@ export function HallHUD() {
         </div>
       </div>
 
-      {/* Navigation breadcrumbs */}
+      {/* Back button */}
       {depth !== 'hall' && (
         <div className="px-4 pt-2 pointer-events-auto">
-          <div className="flex items-center gap-2 text-sm" style={{ fontFamily: 'Orbitron, monospace' }}>
-            <button
-              onClick={navigateToHall}
-              className="text-[#00e5ff] hover:text-[#00ff88] transition-colors cursor-pointer bg-transparent border-none"
-              style={{ fontFamily: 'inherit' }}
+          <button
+            onClick={depth === 'conversation' ? exitConversation : navigateToHall}
+            onMouseDown={(e) => e.preventDefault()}
+            className="cursor-pointer"
+            style={{
+              background: 'rgba(0, 229, 255, 0.08)',
+              border: '1px solid rgba(0, 229, 255, 0.3)',
+              color: '#00e5ff',
+              padding: '8px 20px',
+              borderRadius: '6px',
+              fontFamily: 'Orbitron, monospace',
+              fontSize: '12px',
+              letterSpacing: '2px',
+              textTransform: 'uppercase' as const,
+            }}
+          >
+            {depth === 'conversation' ? 'BACK TO ALCOVE' : 'BACK TO HALL'}
+          </button>
+          {activePolymath && (
+            <span
+              className="ml-3 text-sm"
+              style={{ color: activePolymath.color || '#00e5ff', fontFamily: 'Orbitron, monospace' }}
             >
-              HALL
-            </button>
-            {activePolymath && (
-              <>
-                <span className="text-white/30">/</span>
-                <span style={{ color: activePolymath.color || '#00e5ff' }}>
-                  {activePolymath.name.toUpperCase()}
-                </span>
-              </>
-            )}
-            {depth === 'conversation' && (
-              <>
-                <span className="text-white/30">/</span>
-                <button
-                  onClick={exitConversation}
-                  className="text-[#00ff88] hover:text-white transition-colors cursor-pointer bg-transparent border-none"
-                  style={{ fontFamily: 'inherit' }}
-                >
-                  CONVERSATION
-                </button>
-              </>
-            )}
-          </div>
+              {activePolymath.name.toUpperCase()}
+            </span>
+          )}
         </div>
       )}
 

@@ -57,7 +57,7 @@ export const useHallStore = create<HallState>((set) => ({
   activePolymathId: null,
   previousDepth: null,
   cameraTarget: CAMERA_POSITION,
-  cameraLookAt: [0, 0, 1] as Vector3Tuple,
+  cameraLookAt: [0, 1.0, 0] as Vector3Tuple,
   polymaths: [],
   activeSessionId: null,
   conversations: [],
@@ -79,7 +79,7 @@ export const useHallStore = create<HallState>((set) => ({
       activePolymathId: null,
       previousDepth: state.depth,
       cameraTarget: CAMERA_POSITION,
-      cameraLookAt: [0, 0, 1] as Vector3Tuple,
+      cameraLookAt: [0, 1.0, 0] as Vector3Tuple,
       activeSessionId: null,
     })),
 

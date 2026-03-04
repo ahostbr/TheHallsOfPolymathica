@@ -56615,11 +56615,11 @@ const CYLINDER_RADIUS = 12;
 const RING_0_COUNT = 13;
 const RING_1_COUNT = 12;
 const RING_Y_POSITIONS = [-1.2, 1.5];
-const CAMERA_POSITION = [0, 0.5, 0];
+const CAMERA_POSITION = [0, 1.5, 0.01];
 const CAMERA_FOV = 65;
 const CAMERA_NEAR = 0.1;
 const CAMERA_FAR = 100;
-const ALCOVE_VIEW_DISTANCE = 8.5;
+const ALCOVE_VIEW_DISTANCE = 2;
 function getAlcoveTransform(ring, index) {
   const count = ring === 0 ? RING_0_COUNT : RING_1_COUNT;
   const angularOffset = ring === 1 ? Math.PI / RING_0_COUNT : 0;
@@ -56649,7 +56649,6 @@ const PALETTE = {
   glowPrimary: "#00e5ff",
   edgeGlow: "#00c8ff",
   textPrimary: "#e0f0ff",
-  textSecondary: "#8899aa",
   particleColor: "#00e5ff",
   sceneBackground: "#000508"
 };
@@ -56875,7 +56874,7 @@ const useHallStore = create((set) => ({
   activePolymathId: null,
   previousDepth: null,
   cameraTarget: CAMERA_POSITION,
-  cameraLookAt: [0, 0, 1],
+  cameraLookAt: [0, 1, 0],
   polymaths: [],
   activeSessionId: null,
   conversations: [],
@@ -56892,7 +56891,7 @@ const useHallStore = create((set) => ({
     activePolymathId: null,
     previousDepth: state2.depth,
     cameraTarget: CAMERA_POSITION,
-    cameraLookAt: [0, 0, 1],
+    cameraLookAt: [0, 1, 0],
     activeSessionId: null
   })),
   enterConversation: (sessionId) => set((state2) => ({
@@ -73904,8 +73903,7 @@ function Alcove({
   ring,
   index,
   position,
-  rotation,
-  totalSessions
+  rotation
 }) {
   const groupRef = reactExports.useRef(null);
   const { invalidate: invalidate2 } = useThree();
@@ -73916,13 +73914,13 @@ function Alcove({
   const enterConversation = useHallStore((s) => s.enterConversation);
   const isActive = activePolymathId === polymathId;
   const showTerminal = isActive && (depth === "alcove" || depth === "conversation");
+  const modelPath = POLYMATH_MODELS[polymathId];
   const handleClick = reactExports.useCallback(() => {
-    if (depth === "hall") {
-      const { position: camPos, lookAt } = getAlcoveCameraTarget(ring, index);
-      navigateToAlcove(polymathId, camPos, lookAt);
-      invalidate2();
-    }
-  }, [depth, ring, index, polymathId, navigateToAlcove, invalidate2]);
+    if (isActive) return;
+    const { position: camPos, lookAt } = getAlcoveCameraTarget(ring, index);
+    navigateToAlcove(polymathId, camPos, lookAt);
+    invalidate2();
+  }, [isActive, ring, index, polymathId, navigateToAlcove, invalidate2]);
   const handleSpawnTerminal = reactExports.useCallback(async () => {
     if (activeSessionId) return;
     try {
@@ -73932,7 +73930,6 @@ function Alcove({
       console.error("Failed to spawn session:", err);
     }
   }, [polymathId, activeSessionId, enterConversation]);
-  const glowIntensity = isActive ? 1.5 : 0.5;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(
     "group",
     {
@@ -73944,27 +73941,35 @@ function Alcove({
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           HoloGlassPanel,
           {
-            width: 3.2,
+            width: 2.6,
             height: 3,
-            position: [0, 0, -0.1],
-            color: isActive ? "#0f2a40" : "#0a1628",
+            position: [0, 0, 0],
             edgeColor: color2
           }
         ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "pointLight",
+        /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: null, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          PolymathPortrait,
           {
-            position: [0, 0, 0.5],
-            intensity: glowIntensity,
-            color: color2,
-            distance: 4,
-            decay: 2
+            polymathId,
+            width: 1.8,
+            height: 2,
+            position: [0, 0.2, 0.05],
+            color: color2
           }
-        ),
+        ) }),
+        modelPath && /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: null, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+          PolymathBust,
+          {
+            modelPath,
+            position: [0, 0.2, 0.3],
+            scale: 0.8,
+            color: color2
+          }
+        ) }),
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           HoloText,
           {
-            position: [0, 1.2, 0.05],
+            position: [0, -1.3, 0.05],
             fontSize: 0.18,
             color: color2,
             glowColor: color2,
@@ -73974,64 +73979,13 @@ function Alcove({
         title && /* @__PURE__ */ jsxRuntimeExports.jsx(
           HoloText,
           {
-            position: [0, 0.95, 0.05],
-            fontSize: 0.09,
-            color: PALETTE.textSecondary,
+            position: [0, -1.55, 0.05],
+            fontSize: 0.1,
+            color: color2,
             glowColor: color2,
             children: title
           }
         ),
-        totalSessions > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          HoloText,
-          {
-            position: [1.3, 1.2, 0.05],
-            fontSize: 0.08,
-            color: PALETTE.textSecondary,
-            glowColor: color2,
-            children: `${totalSessions} sessions`
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          reactExports.Suspense,
-          {
-            fallback: /* @__PURE__ */ jsxRuntimeExports.jsx(
-              HoloGlassPanel,
-              {
-                width: 1.4,
-                height: 1.6,
-                position: [0, 0, 0.05],
-                color: color2 + "22",
-                edgeColor: color2,
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  HoloText,
-                  {
-                    position: [0, 0, 0.02],
-                    fontSize: 0.5,
-                    color: color2,
-                    glowColor: color2,
-                    children: name.charAt(0)
-                  }
-                )
-              }
-            ),
-            children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-              PolymathPortrait,
-              {
-                polymathId,
-                color: color2
-              }
-            )
-          }
-        ),
-        POLYMATH_MODELS[polymathId] && /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: null, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-          PolymathBust,
-          {
-            modelPath: POLYMATH_MODELS[polymathId],
-            position: [0.9, -0.1, 0.2],
-            scale: 0.8,
-            color: color2
-          }
-        ) }),
         showTerminal && activeSessionId && /* @__PURE__ */ jsxRuntimeExports.jsx(
           Html,
           {
@@ -74088,21 +74042,77 @@ function Alcove({
     }
   );
 }
+const ARRIVE_THRESHOLD = 0.01;
 function CameraController() {
   const { camera } = useThree();
   const controlsRef = reactExports.useRef(null);
-  const targetPos = reactExports.useRef(new Vector3(...useHallStore.getState().cameraTarget));
-  const targetLook = reactExports.useRef(new Vector3(...useHallStore.getState().cameraLookAt));
+  const targetPos = reactExports.useRef(new Vector3());
+  const targetLook = reactExports.useRef(new Vector3());
+  const isTransitioning = reactExports.useRef(false);
+  const prevDepth = reactExports.useRef("hall");
+  const prevCameraTarget = reactExports.useRef("");
+  const savedHallPos = reactExports.useRef(new Vector3(0, 1.5, 0.01));
+  const savedHallLook = reactExports.useRef(new Vector3(0, 1, 0));
   const depth = useHallStore((s) => s.depth);
   const cameraTarget = useHallStore((s) => s.cameraTarget);
   const cameraLookAt = useHallStore((s) => s.cameraLookAt);
+  const targetKey = cameraTarget.join(",");
+  reactExports.useEffect(() => {
+    if (targetKey !== prevCameraTarget.current) {
+      if (prevDepth.current === "hall" && depth !== "hall") {
+        savedHallPos.current.copy(camera.position);
+        if (controlsRef.current) {
+          savedHallLook.current.copy(controlsRef.current.target);
+        }
+      }
+      if (depth === "hall" && prevDepth.current !== "hall") {
+        targetPos.current.copy(savedHallPos.current);
+        targetLook.current.copy(savedHallLook.current);
+      }
+      if (controlsRef.current) {
+        controlsRef.current.saveState();
+        controlsRef.current.enabled = false;
+      }
+      isTransitioning.current = true;
+      prevCameraTarget.current = targetKey;
+      prevDepth.current = depth;
+    }
+  }, [targetKey, depth, camera]);
+  reactExports.useEffect(() => {
+    const navigateToHall = useHallStore.getState().navigateToHall;
+    const exitConversation = useHallStore.getState().exitConversation;
+    function handleKeyDown(e2) {
+      if (e2.key === "Escape") {
+        const currentDepth = useHallStore.getState().depth;
+        if (currentDepth === "conversation") exitConversation();
+        else if (currentDepth === "alcove") navigateToHall();
+      }
+    }
+    document.addEventListener("keydown", handleKeyDown, true);
+    return () => document.removeEventListener("keydown", handleKeyDown, true);
+  }, []);
   useFrame((state2, delta) => {
-    targetPos.current.set(...cameraTarget);
-    targetLook.current.set(...cameraLookAt);
-    camera.position.lerp(targetPos.current, 1 - Math.exp(-3 * delta));
-    if (controlsRef.current && depth !== "hall") {
-      controlsRef.current.target.lerp(targetLook.current, 1 - Math.exp(-3 * delta));
-      controlsRef.current.update();
+    if (depth === "hall" && isTransitioning.current) {
+      targetPos.current.copy(savedHallPos.current);
+      targetLook.current.copy(savedHallLook.current);
+    } else if (!isTransitioning.current || depth !== "hall") {
+      targetPos.current.set(...cameraTarget);
+      targetLook.current.set(...cameraLookAt);
+    }
+    if (isTransitioning.current) {
+      camera.position.lerp(targetPos.current, 1 - Math.exp(-3 * delta));
+      if (controlsRef.current) {
+        controlsRef.current.target.lerp(targetLook.current, 1 - Math.exp(-3 * delta));
+      }
+      const dist = camera.position.distanceTo(targetPos.current);
+      if (dist < ARRIVE_THRESHOLD) {
+        isTransitioning.current = false;
+        camera.position.copy(targetPos.current);
+        if (controlsRef.current) {
+          controlsRef.current.target.copy(targetLook.current);
+          controlsRef.current.enabled = true;
+        }
+      }
     }
     state2.invalidate();
   });
@@ -74110,13 +74120,16 @@ function CameraController() {
     OrbitControls2,
     {
       ref: controlsRef,
-      enableZoom: depth === "hall",
-      enableRotate: depth === "hall",
+      target: [0, 1, 0],
+      enableZoom: true,
+      enableRotate: true,
       enablePan: false,
-      zoomSpeed: 0.5,
-      rotateSpeed: 0.4,
+      zoomSpeed: 0.3,
+      rotateSpeed: 0.3,
       minDistance: 0.5,
-      maxDistance: 20,
+      maxDistance: 14,
+      minPolarAngle: Math.PI / 4,
+      maxPolarAngle: 3 * Math.PI / 4,
       makeDefault: true
     }
   );
@@ -74136,6 +74149,7 @@ const DEFAULT_COLORS = [
 function HallLayout() {
   const polymaths = useHallStore((s) => s.polymaths);
   const setPolymaths = useHallStore((s) => s.setPolymaths);
+  const { invalidate: invalidate2 } = useThree();
   reactExports.useEffect(() => {
     async function loadPolymaths() {
       try {
@@ -74154,12 +74168,13 @@ function HallLayout() {
           };
         });
         setPolymaths(data);
+        invalidate2();
       } catch (err) {
         console.error("Failed to load polymaths:", err);
       }
     }
     loadPolymaths();
-  }, [setPolymaths]);
+  }, [setPolymaths, invalidate2]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(CameraController, {}),
     polymaths.map((polymath) => {
@@ -74189,6 +74204,16 @@ function HallHUD() {
   const navigateToHall = useHallStore((s) => s.navigateToHall);
   const exitConversation = useHallStore((s) => s.exitConversation);
   const activePolymath = polymaths.find((p2) => p2.id === activePolymathId);
+  reactExports.useEffect(() => {
+    function handleKeyDown(e2) {
+      if (e2.key === "Escape") {
+        if (depth === "conversation") exitConversation();
+        else if (depth === "alcove") navigateToHall();
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [depth, navigateToHall, exitConversation]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-x-0 top-0 z-50 pointer-events-none", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "titlebar-drag h-8 flex items-center justify-between px-4", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs tracking-[4px] uppercase", style: { color: "#00e5ff", fontFamily: "Orbitron, monospace" }, children: "The Halls of Polymathica" }),
@@ -74219,33 +74244,36 @@ function HallHUD() {
         )
       ] })
     ] }),
-    depth !== "hall" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "px-4 pt-2 pointer-events-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-2 text-sm", style: { fontFamily: "Orbitron, monospace" }, children: [
+    depth !== "hall" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 pt-2 pointer-events-auto", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
-          onClick: navigateToHall,
-          className: "text-[#00e5ff] hover:text-[#00ff88] transition-colors cursor-pointer bg-transparent border-none",
-          style: { fontFamily: "inherit" },
-          children: "HALL"
+          onClick: depth === "conversation" ? exitConversation : navigateToHall,
+          onMouseDown: (e2) => e2.preventDefault(),
+          className: "cursor-pointer",
+          style: {
+            background: "rgba(0, 229, 255, 0.08)",
+            border: "1px solid rgba(0, 229, 255, 0.3)",
+            color: "#00e5ff",
+            padding: "8px 20px",
+            borderRadius: "6px",
+            fontFamily: "Orbitron, monospace",
+            fontSize: "12px",
+            letterSpacing: "2px",
+            textTransform: "uppercase"
+          },
+          children: depth === "conversation" ? "BACK TO ALCOVE" : "BACK TO HALL"
         }
       ),
-      activePolymath && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white/30", children: "/" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { color: activePolymath.color || "#00e5ff" }, children: activePolymath.name.toUpperCase() })
-      ] }),
-      depth === "conversation" && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-white/30", children: "/" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          "button",
-          {
-            onClick: exitConversation,
-            className: "text-[#00ff88] hover:text-white transition-colors cursor-pointer bg-transparent border-none",
-            style: { fontFamily: "inherit" },
-            children: "CONVERSATION"
-          }
-        )
-      ] })
-    ] }) }),
+      activePolymath && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "span",
+        {
+          className: "ml-3 text-sm",
+          style: { color: activePolymath.color || "#00e5ff", fontFamily: "Orbitron, monospace" },
+          children: activePolymath.name.toUpperCase()
+        }
+      )
+    ] }),
     depth === "hall" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed bottom-4 inset-x-0 flex justify-center pointer-events-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
       "div",
       {
