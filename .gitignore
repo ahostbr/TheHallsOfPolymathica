@@ -1,8 +1,2 @@
-node_modules/
-out/
-dist/
-.env
-*.log
-test-results/
-tests/screenshots/
-/docs/screenshots
+node_modules/\nout/\ndist/\n.env\n*.log
+/node_modules
