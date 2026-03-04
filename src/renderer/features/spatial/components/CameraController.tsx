@@ -7,8 +7,11 @@ import { ROTUNDA_CAMERA_POS } from '../constants/layout'
 
 const LERP_SPEED = 5
 const ARRIVE_THRESHOLD = 0.001
+const MOVE_SPEED = 8
 
 const _m = new Matrix4()
+const _forward = new Vector3()
+const _right = new Vector3()
 
 export function CameraController() {
   const { camera } = useThree()
@@ -61,10 +64,13 @@ export function CameraController() {
   }, [targetKey, cameraTarget, cameraLookAt, camera])
 
   const depth = useHallStore((s) => s.depth)
+  const keysDown = useRef(new Set<string>())
 
   // ESC key handler — pops one navigation depth level
+  // WASD key tracking — all suppressed when terminal is focused
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
+      if (useHallStore.getState().terminalFocused) return
       if (e.key === 'Escape') {
         const state = useHallStore.getState()
         const d = state.depth
@@ -72,14 +78,44 @@ export function CameraController() {
         else if (d === 'corridor') state.exitCorridor()
         else if (d === 'wing') state.navigateToRotunda()
       }
+      keysDown.current.add(e.key.toLowerCase())
+    }
+    function handleKeyUp(e: KeyboardEvent) {
+      keysDown.current.delete(e.key.toLowerCase())
     }
     document.addEventListener('keydown', handleKeyDown, true)
-    return () => document.removeEventListener('keydown', handleKeyDown, true)
+    document.addEventListener('keyup', handleKeyUp, true)
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown, true)
+      document.removeEventListener('keyup', handleKeyUp, true)
+    }
   }, [])
 
   useFrame((state, delta) => {
     // SplineCameraController owns the camera during corridor flight
     if (depth === 'corridor') return
+
+    // WASD movement — forward/back/strafe relative to camera facing
+    const keys = keysDown.current
+    if (keys.size > 0 && !isTransitioning.current && controlsRef.current) {
+      camera.getWorldDirection(_forward)
+      _forward.y = 0
+      _forward.normalize()
+      _right.crossVectors(_forward, camera.up).normalize()
+
+      const move = new Vector3()
+      if (keys.has('w')) move.add(_forward)
+      if (keys.has('s')) move.sub(_forward)
+      if (keys.has('d')) move.add(_right)
+      if (keys.has('a')) move.sub(_right)
+
+      if (move.lengthSq() > 0) {
+        move.normalize().multiplyScalar(MOVE_SPEED * delta)
+        camera.position.add(move)
+        controlsRef.current.target.add(move)
+        controlsRef.current.update()
+      }
+    }
 
     if (!isTransitioning.current) {
       state.invalidate()
@@ -119,7 +155,7 @@ export function CameraController() {
       ref={controlsRef}
       enableZoom
       enableRotate
-      enablePan={false}
+      enablePan
       zoomSpeed={0.3}
       rotateSpeed={0.3}
       minDistance={0.5}

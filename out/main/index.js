@@ -449,10 +449,6 @@ class SessionSpawner {
         }
       }
     );
-    setTimeout(() => {
-      const escapedPath = agentFile.replace(/\\/g, "/");
-      this.ptyManager.write(sessionId, `claude --agent-prompt "${escapedPath}"\r`);
-    }, 500);
     return sessionId;
   }
 }

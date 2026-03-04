@@ -117,6 +117,12 @@ function createWindow(): void {
     return sessionSpawner.spawn(polymathId, polymath.agentFile)
   })
 
+  ipcMain.handle('session:get-agent-path', (_e, polymathId: string) => {
+    const polymath = POLYMATH_REGISTRY.find(p => p.id === polymathId)
+    if (!polymath) throw new Error(`Unknown polymath: ${polymathId}`)
+    return polymath.agentFile
+  })
+
   // Corridor content IPC
   ipcMain.handle('corridor:get-content', (_event, polymathId: string) => getCorridorContent(polymathId))
   ipcMain.handle('corridor:get-all-content', () => getAllCorridorContent())

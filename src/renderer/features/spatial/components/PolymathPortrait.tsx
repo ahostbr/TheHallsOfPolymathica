@@ -9,6 +9,7 @@ interface PolymathPortraitProps {
   height?: number
   position?: Vector3Tuple
   color: string
+  onClick?: () => void
 }
 
 export function PolymathPortrait({
@@ -17,6 +18,7 @@ export function PolymathPortrait({
   height = 1.6,
   position = [0, 0, 0.05],
   color,
+  onClick,
 }: PolymathPortraitProps) {
   const texture = useTexture(`portraits/${polymathId}.png`)
   const edgesGeo = useMemo(
@@ -26,7 +28,11 @@ export function PolymathPortrait({
 
   return (
     <group position={position}>
-      <mesh>
+      <mesh
+        onClick={onClick ? (e) => { e.stopPropagation(); onClick() } : undefined}
+        onPointerOver={onClick ? () => { document.body.style.cursor = 'pointer' } : undefined}
+        onPointerOut={onClick ? () => { document.body.style.cursor = 'default' } : undefined}
+      >
         <planeGeometry args={[width, height]} />
         <meshBasicMaterial map={texture} toneMapped={false} />
       </mesh>

@@ -97,6 +97,8 @@ const api = {
   session: {
     spawn: (polymathId: string): Promise<string> =>
       ipcRenderer.invoke('session:spawn', polymathId),
+    getAgentPath: (polymathId: string): Promise<string> =>
+      ipcRenderer.invoke('session:get-agent-path', polymathId),
   },
 
   corridor: {

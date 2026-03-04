@@ -34,13 +34,6 @@ export class SessionSpawner {
       }
     )
 
-    // After shell starts, send the Claude Code command with the agent prompt
-    // Small delay to let the shell initialize
-    setTimeout(() => {
-      const escapedPath = agentFile.replace(/\\/g, '/')
-      this.ptyManager.write(sessionId, `claude --agent-prompt "${escapedPath}"\r`)
-    }, 500)
-
     return sessionId
   }
 }

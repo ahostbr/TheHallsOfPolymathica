@@ -1,19 +1,18 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { useThree } from '@react-three/fiber'
-import { Vector3 } from 'three'
-import type { Vector3Tuple } from 'three'
 import { useHallStore } from '../store/hallStore'
 import { Rotunda } from './Rotunda'
 import { Corridor } from './Corridor'
-import { Alcove } from './Alcove'
 import { CameraController } from './CameraController'
 import { SplineCameraController } from './SplineCameraController'
 import { getWingForPolymath, WINGS } from '../constants/wings'
-import type { WingDefinition } from '../constants/wings'
-import type { PolymathData } from '../store/hallStore'
-import { RING_0_COUNT, CORRIDOR_LENGTH } from '../constants/layout'
+import { RING_0_COUNT } from '../constants/layout'
 
-export function RotundaLayout() {
+interface RotundaLayoutProps {
+  onSettingsOpen?: () => void
+}
+
+export function RotundaLayout({ onSettingsOpen }: RotundaLayoutProps) {
   const polymaths = useHallStore((s) => s.polymaths)
   const setPolymaths = useHallStore((s) => s.setPolymaths)
   const depth = useHallStore((s) => s.depth)
@@ -52,55 +51,19 @@ export function RotundaLayout() {
     <>
       <CameraController />
       <SplineCameraController />
-      <Rotunda />
+      <Rotunda onSettingsOpen={onSettingsOpen} />
 
-      {/* Corridor: mounted during corridor flight and at alcove */}
+      {/* Corridor: mounted during corridor flight and at alcove (includes end wall alcove content) */}
       {activePolymath && activeWing && (depth === 'corridor' || depth === 'alcove') && (
         <Corridor
           polymathId={activePolymath.id}
           color={activePolymath.color}
+          name={activePolymath.name}
+          title={activePolymath.title}
           direction={[activeWing.archPosition[0], 0, activeWing.archPosition[2]]}
           origin={[activeWing.archPosition[0], 0, activeWing.archPosition[2]]}
         />
       )}
-
-      {/* Alcove: at the end of the corridor */}
-      {activePolymath && activeWing && depth === 'alcove' && (
-        <AlcoveAtCorridorEnd activeWing={activeWing} activePolymath={activePolymath} />
-      )}
     </>
-  )
-}
-
-/** Positions the Alcove at the far end of the active corridor */
-function AlcoveAtCorridorEnd({
-  activeWing,
-  activePolymath,
-}: {
-  activeWing: WingDefinition
-  activePolymath: PolymathData
-}) {
-  const pos = useMemo<Vector3Tuple>(() => {
-    const dir = new Vector3(...activeWing.archPosition).normalize()
-    const archDist = new Vector3(...activeWing.archPosition).length()
-    const endDist = archDist + CORRIDOR_LENGTH - 3
-    return [dir.x * endDist, 1.5, dir.z * endDist]
-  }, [activeWing])
-
-  const rot = useMemo<Vector3Tuple>(() => {
-    const angle = Math.atan2(activeWing.archPosition[0], activeWing.archPosition[2])
-    return [0, angle + Math.PI, 0]
-  }, [activeWing])
-
-  return (
-    <Alcove
-      polymathId={activePolymath.id}
-      name={activePolymath.name}
-      title={activePolymath.title}
-      color={activePolymath.color}
-      position={pos}
-      rotation={rot}
-      totalSessions={activePolymath.totalSessions}
-    />
   )
 }

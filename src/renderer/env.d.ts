@@ -61,6 +61,7 @@ interface PolymathicaApi {
 
   session: {
     spawn: (polymathId: string) => Promise<string>
+    getAgentPath: (polymathId: string) => Promise<string>
   }
 
   corridor: {

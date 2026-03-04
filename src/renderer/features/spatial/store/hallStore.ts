@@ -54,6 +54,13 @@ interface HallState {
   // Active terminal session
   activeSessionId: string | null
 
+  // Terminal display
+  terminalFocused: boolean
+  terminalScale: number
+  terminalWidth: number
+  terminalHeight: number
+  terminalY: number
+
   // Actions
   setPolymaths(polymaths: PolymathData[]): void
   navigateToWing(wingId: WingId): void
@@ -67,6 +74,11 @@ interface HallState {
   setConversations(conversations: ConversationData[]): void
   setActiveSessionId(sessionId: string | null): void
   setCorridorFlightDuration(seconds: number): void
+  setTerminalFocused(focused: boolean): void
+  setTerminalScale(scale: number): void
+  setTerminalWidth(width: number): void
+  setTerminalHeight(height: number): void
+  setTerminalY(y: number): void
 }
 
 export const useHallStore = create<HallState>((set, get) => ({
@@ -80,6 +92,11 @@ export const useHallStore = create<HallState>((set, get) => ({
   polymaths: [],
   conversations: [],
   activeSessionId: null,
+  terminalFocused: false,
+  terminalScale: 0.19,
+  terminalWidth: 1200,
+  terminalHeight: 1000,
+  terminalY: 2.5,
 
   setPolymaths: (polymaths) => set({ polymaths }),
 
@@ -94,7 +111,7 @@ export const useHallStore = create<HallState>((set, get) => ({
       activeWing: wingId,
       activePolymathId: null,
       cameraTarget: [(dir[0] / len) * camDist, 1.5, (dir[2] / len) * camDist],
-      cameraLookAt: [...wing.archPosition],
+      cameraLookAt: [wing.archPosition[0], 3.5, wing.archPosition[2]],
     })
   },
 
@@ -153,7 +170,7 @@ export const useHallStore = create<HallState>((set, get) => ({
 
   exitConversation: () => {
     const { activeWing } = get()
-    set({ activeSessionId: null, activePolymathId: null, corridorProgress: 0 })
+    set({ activeSessionId: null, activePolymathId: null, corridorProgress: 0, terminalFocused: false })
     if (activeWing) {
       get().navigateToWing(activeWing)
     } else {
@@ -168,6 +185,12 @@ export const useHallStore = create<HallState>((set, get) => ({
   setActiveSessionId: (sessionId) => set({ activeSessionId: sessionId }),
 
   setCorridorFlightDuration: (seconds) => set({ corridorFlightDuration: seconds }),
+
+  setTerminalFocused: (focused) => set({ terminalFocused: focused }),
+  setTerminalScale: (scale) => set({ terminalScale: scale }),
+  setTerminalWidth: (width) => set({ terminalWidth: width }),
+  setTerminalHeight: (height) => set({ terminalHeight: height }),
+  setTerminalY: (y) => set({ terminalY: y }),
 }))
 
 // Expose store for Playwright e2e tests
