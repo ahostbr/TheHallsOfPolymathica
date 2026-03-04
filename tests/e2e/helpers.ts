@@ -170,6 +170,58 @@ export async function getCorridorProgress(page: Page): Promise<number> {
   })
 }
 
+/** Inject polymath data directly into the store (bypasses DB) */
+export async function seedPolymathsInStore(page: Page) {
+  await page.evaluate(() => {
+    const store = (window as any).__hallStore
+    if (!store) return
+    const registry = [
+      { id: 'feynman', name: 'Richard Feynman', title: 'First-Principles Reasoning', color: '#FF6B35' },
+      { id: 'carmack', name: 'John Carmack', title: 'Constraint-First Engineering', color: '#00FF41' },
+      { id: 'shannon', name: 'Claude Shannon', title: 'Signal & Noise Separation', color: '#00E5FF' },
+      { id: 'tao', name: 'Terence Tao', title: 'Structured Exploration', color: '#9D4EDD' },
+      { id: 'davinci', name: 'Leonardo da Vinci', title: 'Saper Vedere', color: '#FFD700' },
+      { id: 'lovelace', name: 'Ada Lovelace', title: 'Poetical Science', color: '#FF69B4' },
+      { id: 'vangogh', name: 'Vincent van Gogh', title: 'Emotional Truth Engineering', color: '#FFA500' },
+      { id: 'tesla', name: 'Nikola Tesla', title: 'Mental Simulation', color: '#00BFFF' },
+      { id: 'jobs', name: 'Steve Jobs', title: 'Intersection of Tech & Humanities', color: '#EEEEEE' },
+      { id: 'gates', name: 'Bill Gates', title: 'Platform Thinking', color: '#0078D4' },
+      { id: 'linus', name: 'Linus Torvalds', title: 'Good Taste in Code', color: '#F0DB4F' },
+      { id: 'graham', name: 'Paul Graham', title: 'Essay-Driven Clarity', color: '#FF4500' },
+      { id: 'bezos', name: 'Jeff Bezos', title: 'Working Backwards', color: '#FF9900' },
+      { id: 'andreessen', name: 'Marc Andreessen', title: 'Technological Discontinuities', color: '#1DA1F2' },
+      { id: 'ogilvy', name: 'David Ogilvy', title: 'Research-First Advertising', color: '#DC143C' },
+      { id: 'aurelius', name: 'Marcus Aurelius', title: 'Stoic Deliberation', color: '#C0C0C0' },
+      { id: 'godin', name: 'Seth Godin', title: 'Smallest Viable Audience', color: '#8B5CF6' },
+      { id: 'thiel', name: 'Peter Thiel', title: 'Zero to One', color: '#00FF88' },
+      { id: 'disney', name: 'Walt Disney', title: 'Dreamer / Realist / Critic', color: '#FF1493' },
+      { id: 'munger', name: 'Charlie Munger', title: 'Mental Model Lattice', color: '#B8860B' },
+      { id: 'suntzu', name: 'Sun Tzu', title: 'Strategic Intelligence', color: '#8B0000' },
+      { id: 'socrates', name: 'Socrates', title: 'Elenctic Examination', color: '#E0E0E0' },
+      { id: 'musk', name: 'Elon Musk', title: 'Physics-Constrained Reasoning', color: '#E04230' },
+      { id: 'mrbeast', name: 'MrBeast', title: 'Attention Engineering', color: '#00CFFF' },
+      { id: 'rams', name: 'Dieter Rams', title: 'Less But Better', color: '#666666' },
+    ]
+    const RING_0_COUNT = 13
+    const data = registry.map((p, i) => ({
+      id: p.id,
+      name: p.name,
+      title: p.title,
+      color: p.color,
+      totalSessions: 0,
+      ring: i < RING_0_COUNT ? 0 : 1,
+      index: i < RING_0_COUNT ? i : i - RING_0_COUNT,
+    }))
+    store.getState().setPolymaths(data)
+
+    // Force R3F re-render
+    const canvas = document.querySelector('canvas') as any
+    const r3f = canvas?.__r3f?.store
+    if (r3f) r3f.getState().invalidate()
+  })
+  await page.waitForTimeout(1000)
+}
+
 /** Check if a text is visible in the page */
 export async function hasText(page: Page, text: string): Promise<boolean> {
   const el = page.locator(`text=${text}`).first()

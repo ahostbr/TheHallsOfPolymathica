@@ -68,12 +68,11 @@ Each agent file in `agents/` defines a complete cognitive architecture — not a
 - **better-sqlite3** — Local database for polymaths, conversations, tags
 - **Zustand 5** — Reactive state management
 - **Tailwind CSS 4** — Utility styling for HUD overlays
-- **Playwright** — 84 e2e tests across 9 spec files
+- **Playwright** — E2E screenshot tests
 
 ## Prerequisites
 
 - **Node.js** 20+
-- **pnpm** 9+
 - **Claude Code CLI** installed globally (`npm install -g @anthropic-ai/claude-code`)
 - **Windows** (node-pty builds for the current platform)
 
@@ -81,20 +80,20 @@ Each agent file in `agents/` defines a complete cognitive architecture — not a
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/TheHallsOfPolymathica.git
+git clone https://github.com/ahostbr/TheHallsOfPolymathica.git
 cd TheHallsOfPolymathica
 
 # Install dependencies
-pnpm install
+npm install
 
 # Run in development mode
-pnpm run dev
+npm run dev
 
 # Build for production
-pnpm run build
+npm run build
 
 # Package as installer
-pnpm run dist
+npm run dist
 ```
 
 ## Controls
@@ -126,10 +125,14 @@ src/
   main/                    # Electron main process
     services/
       pty-manager.ts       # PTY lifecycle management
+      pty-bridge.ts        # HTTP PTY bridge
       session-spawner.ts   # Shell + Claude Code spawning
       agent-content-service.ts  # Parses agent .md files
     db/
       database.ts          # SQLite schema + queries
+    ipc/
+      db-handlers.ts       # Database IPC handlers
+      pty-handlers.ts      # PTY IPC handlers
     polymath-seed.ts       # 25 polymath definitions
   renderer/                # React 3D UI
     features/spatial/
@@ -139,12 +142,23 @@ src/
         Archway.tsx         # Wing card with click-to-navigate
         WingGallery.tsx     # Portrait grid per wing
         Corridor.tsx        # Panels + end wall + terminal
+        Alcove.tsx          # Alcove end wall with portrait
         CameraController.tsx    # WASD + lerp/slerp transitions
         SplineCameraController.tsx  # CatmullRom corridor flight
+        CorridorPanel.tsx   # Holographic info panels
+        HoloGlassPanel.tsx  # Glass material panel
+        HoloText.tsx        # Holographic text rendering
+        PolymathPortrait.tsx    # Portrait with click handler
+        SpatialScene.tsx    # R3F Canvas + lighting
+        ParticleField.tsx   # Ambient particle effects
       store/hallStore.ts    # Zustand navigation state
       constants/
         wings.ts            # 4 wing definitions
         layout.ts           # Dimensions, camera, spacing
+      hooks/
+        useCorridorContent.ts  # Agent content loader
+        useSplineFlight.ts     # CatmullRom flight logic
+      materials/            # Custom Three.js shaders
     components/
       terminal/TerminalInstance.tsx  # xterm.js wrapper
       SettingsModal.tsx     # Flight speed + terminal display
@@ -161,14 +175,14 @@ tests/                     # Playwright e2e specs
 
 ```bash
 # Unit tests
-pnpm run test
+npm run test
 
 # E2E tests (requires build first)
-pnpm run build
-pnpm run test:e2e
+npm run build
+npm run test:e2e
 
 # E2E with visible browser
-pnpm run test:e2e:headed
+npm run test:e2e:headed
 ```
 
 ## Settings
