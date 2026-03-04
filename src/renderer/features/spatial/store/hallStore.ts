@@ -7,7 +7,7 @@ import {
   WING_VIEW_DISTANCE,
 } from '../constants/layout'
 import type { WingId } from '../constants/wings'
-import { WINGS } from '../constants/wings'
+import { WINGS, getWingForPolymath } from '../constants/wings'
 
 export type NavigationDepth = 'rotunda' | 'wing' | 'corridor' | 'alcove'
 
@@ -101,6 +101,7 @@ export const useHallStore = create<HallState>((set, get) => ({
     set({
       depth: 'corridor',
       activePolymathId: polymathId,
+      activeWing: getWingForPolymath(polymathId),
       corridorProgress: 0,
     }),
 
@@ -146,3 +147,8 @@ export const useHallStore = create<HallState>((set, get) => ({
 
   setCorridorFlightDuration: (seconds) => set({ corridorFlightDuration: seconds }),
 }))
+
+// Expose store for Playwright e2e tests
+if (typeof window !== 'undefined') {
+  ;(window as any).__hallStore = useHallStore
+}
