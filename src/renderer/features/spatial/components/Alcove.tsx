@@ -1,13 +1,11 @@
 import { useRef, useCallback, Suspense } from 'react'
 import type { Group, Vector3Tuple } from 'three'
-import { useThree } from '@react-three/fiber'
 import { Html } from '@react-three/drei'
 import { HoloGlassPanel } from './HoloGlassPanel'
 import { HoloText } from './HoloText'
 import { PolymathPortrait } from './PolymathPortrait'
 import { PolymathBust } from './PolymathBust'
 import { useHallStore } from '../store/hallStore'
-import { getAlcoveCameraTarget } from '../constants/layout'
 import { TerminalInstance } from '@/components/terminal/TerminalInstance'
 
 const POLYMATH_MODELS: Record<string, string> = {
@@ -37,23 +35,14 @@ export function Alcove({
   rotation,
 }: AlcoveProps) {
   const groupRef = useRef<Group>(null)
-  const { invalidate } = useThree()
   const depth = useHallStore((s) => s.depth)
   const activePolymathId = useHallStore((s) => s.activePolymathId)
   const activeSessionId = useHallStore((s) => s.activeSessionId)
-  const navigateToAlcove = useHallStore((s) => s.navigateToAlcove)
   const enterConversation = useHallStore((s) => s.enterConversation)
 
   const isActive = activePolymathId === polymathId
-  const showTerminal = isActive && (depth === 'alcove' || depth === 'conversation')
+  const showTerminal = isActive && depth === 'alcove'
   const modelPath = POLYMATH_MODELS[polymathId]
-
-  const handleClick = useCallback(() => {
-    if (isActive) return // already viewing this alcove
-    const { position: camPos, lookAt } = getAlcoveCameraTarget(ring, index)
-    navigateToAlcove(polymathId, camPos, lookAt)
-    invalidate()
-  }, [isActive, ring, index, polymathId, navigateToAlcove, invalidate])
 
   const handleSpawnTerminal = useCallback(async () => {
     if (activeSessionId) return
@@ -70,7 +59,6 @@ export function Alcove({
       ref={groupRef}
       position={position}
       rotation={rotation}
-      onClick={handleClick}
     >
       {/* Glass panel backdrop */}
       <HoloGlassPanel
