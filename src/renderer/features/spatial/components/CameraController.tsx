@@ -60,16 +60,17 @@ export function CameraController() {
     }
   }, [targetKey, cameraTarget, cameraLookAt, camera])
 
-  // ESC key handler
-  useEffect(() => {
-    const navigateToHall = useHallStore.getState().navigateToHall
-    const exitConversation = useHallStore.getState().exitConversation
+  const depth = useHallStore((s) => s.depth)
 
+  // ESC key handler — pops one navigation depth level
+  useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') {
-        const currentDepth = useHallStore.getState().depth
-        if (currentDepth === 'conversation') exitConversation()
-        else if (currentDepth === 'alcove') navigateToHall()
+        const state = useHallStore.getState()
+        const d = state.depth
+        if (d === 'alcove') state.exitCorridor()
+        else if (d === 'corridor') state.exitCorridor()
+        else if (d === 'wing') state.navigateToRotunda()
       }
     }
     document.addEventListener('keydown', handleKeyDown, true)
@@ -77,6 +78,9 @@ export function CameraController() {
   }, [])
 
   useFrame((state, delta) => {
+    // SplineCameraController owns the camera during corridor flight
+    if (depth === 'corridor') return
+
     if (!isTransitioning.current) {
       state.invalidate()
       return
