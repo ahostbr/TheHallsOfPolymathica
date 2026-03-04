@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import type { Vector3Tuple } from 'three'
-import { CAMERA_POSITION } from '../constants/layout'
+import { ENTRANCE_CAMERA_POS, ENTRANCE_CAMERA_LOOK } from '../constants/layout'
 
 export type NavigationDepth = 'hall' | 'alcove' | 'conversation'
 
@@ -56,8 +56,8 @@ export const useHallStore = create<HallState>((set) => ({
   depth: 'hall',
   activePolymathId: null,
   previousDepth: null,
-  cameraTarget: CAMERA_POSITION,
-  cameraLookAt: [0, 1.0, 0] as Vector3Tuple,
+  cameraTarget: ENTRANCE_CAMERA_POS,
+  cameraLookAt: ENTRANCE_CAMERA_LOOK,
   polymaths: [],
   activeSessionId: null,
   conversations: [],
@@ -78,8 +78,8 @@ export const useHallStore = create<HallState>((set) => ({
       depth: 'hall',
       activePolymathId: null,
       previousDepth: state.depth,
-      cameraTarget: CAMERA_POSITION,
-      cameraLookAt: [0, 1.0, 0] as Vector3Tuple,
+      cameraTarget: ENTRANCE_CAMERA_POS,
+      cameraLookAt: ENTRANCE_CAMERA_LOOK,
       activeSessionId: null,
     })),
 

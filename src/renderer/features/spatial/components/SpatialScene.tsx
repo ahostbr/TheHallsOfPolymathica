@@ -8,7 +8,7 @@ import {
 } from '@react-three/postprocessing'
 import { BlendFunction } from 'postprocessing'
 import { Vector2 } from 'three'
-import { CAMERA_POSITION, CAMERA_FOV, CAMERA_NEAR, CAMERA_FAR } from '../constants/layout'
+import { ENTRANCE_CAMERA_POS, CAMERA_FOV, CAMERA_NEAR, CAMERA_FAR } from '../constants/layout'
 import { PALETTE } from '../constants/palette'
 import { ParticleField } from './ParticleField'
 import { ScanlineOverlay } from './ScanlineOverlay'
@@ -66,7 +66,7 @@ export function SpatialScene({ children }: SpatialSceneProps) {
   return (
     <Canvas
       camera={{
-        position: CAMERA_POSITION,
+        position: ENTRANCE_CAMERA_POS,
         fov: CAMERA_FOV,
         near: CAMERA_NEAR,
         far: CAMERA_FAR,

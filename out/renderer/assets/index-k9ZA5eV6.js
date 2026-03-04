@@ -56615,10 +56615,20 @@ const CYLINDER_RADIUS = 12;
 const RING_0_COUNT = 13;
 const RING_1_COUNT = 12;
 const RING_Y_POSITIONS = [-1.2, 1.5];
-const CAMERA_POSITION = [0, 1.5, 0.01];
 const CAMERA_FOV = 65;
 const CAMERA_NEAR = 0.1;
 const CAMERA_FAR = 100;
+const ENTRANCE_ANGLE = Math.PI;
+const ENTRANCE_Y = 0.15;
+const ENTRANCE_POSITION = [
+  Math.sin(ENTRANCE_ANGLE) * CYLINDER_RADIUS,
+  // ≈ 0
+  ENTRANCE_Y,
+  Math.cos(ENTRANCE_ANGLE) * CYLINDER_RADIUS
+  // -12
+];
+const ENTRANCE_CAMERA_POS = [0, 0.5, 0.01];
+const ENTRANCE_CAMERA_LOOK = [0, 0.15, -4];
 const ALCOVE_VIEW_DISTANCE = 2;
 function getAlcoveTransform(ring, index) {
   const count = ring === 0 ? RING_0_COUNT : RING_1_COUNT;
@@ -56829,7 +56839,7 @@ function SpatialScene({ children }) {
     Canvas,
     {
       camera: {
-        position: CAMERA_POSITION,
+        position: ENTRANCE_CAMERA_POS,
         fov: CAMERA_FOV,
         near: CAMERA_NEAR,
         far: CAMERA_FAR
@@ -56873,8 +56883,8 @@ const useHallStore = create((set) => ({
   depth: "hall",
   activePolymathId: null,
   previousDepth: null,
-  cameraTarget: CAMERA_POSITION,
-  cameraLookAt: [0, 1, 0],
+  cameraTarget: ENTRANCE_CAMERA_POS,
+  cameraLookAt: ENTRANCE_CAMERA_LOOK,
   polymaths: [],
   activeSessionId: null,
   conversations: [],
@@ -56890,8 +56900,8 @@ const useHallStore = create((set) => ({
     depth: "hall",
     activePolymathId: null,
     previousDepth: state2.depth,
-    cameraTarget: CAMERA_POSITION,
-    cameraLookAt: [0, 1, 0],
+    cameraTarget: ENTRANCE_CAMERA_POS,
+    cameraLookAt: ENTRANCE_CAMERA_LOOK,
     activeSessionId: null
   })),
   enterConversation: (sessionId) => set((state2) => ({
@@ -74042,52 +74052,88 @@ function Alcove({
     }
   );
 }
+const COLOR = "#00e5ff";
+function EntranceCard() {
+  const position = ENTRANCE_POSITION;
+  const rotation = [0, ENTRANCE_ANGLE + Math.PI, 0];
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("group", { position, rotation, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HoloGlassPanel,
+      {
+        width: 3,
+        height: 3.6,
+        position: [0, 0, 0],
+        edgeColor: COLOR
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HoloText,
+      {
+        position: [0, 0.6, 0.05],
+        fontSize: 0.22,
+        color: COLOR,
+        glowColor: COLOR,
+        children: "THE HALLS OF"
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HoloText,
+      {
+        position: [0, 0.1, 0.05],
+        fontSize: 0.28,
+        color: COLOR,
+        glowColor: COLOR,
+        children: "POLYMATHICA"
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HoloText,
+      {
+        position: [0, -0.8, 0.05],
+        fontSize: 0.1,
+        color: "#8899aa",
+        glowColor: COLOR,
+        children: "ENTER THE HALL"
+      }
+    )
+  ] });
+}
 const ARRIVE_THRESHOLD = 1e-3;
-const _scratchMatrix = new Matrix4();
-const _scratchQuat = new Quaternion();
+const _m = new Matrix4();
 function CameraController() {
   const { camera } = useThree();
   const controlsRef = reactExports.useRef(null);
   const targetPos = reactExports.useRef(new Vector3());
   const targetLook = reactExports.useRef(new Vector3());
+  const finalQuat = reactExports.useRef(new Quaternion());
   const isTransitioning = reactExports.useRef(false);
-  const prevDepth = reactExports.useRef("hall");
-  const prevCameraTarget = reactExports.useRef("");
-  const savedHallPos = reactExports.useRef(new Vector3(0, 1.5, 0.01));
-  const savedHallLook = reactExports.useRef(new Vector3(0, 1, 0));
-  const depth = useHallStore((s) => s.depth);
+  const prevCameraTarget = reactExports.useRef(ENTRANCE_CAMERA_POS.join(","));
   const cameraTarget = useHallStore((s) => s.cameraTarget);
   const cameraLookAt = useHallStore((s) => s.cameraLookAt);
   reactExports.useEffect(() => {
     if (controlsRef.current) {
-      controlsRef.current.target.set(0, 1, 0);
+      controlsRef.current.target.set(...cameraLookAt);
       controlsRef.current.update();
     }
   }, []);
   const targetKey = cameraTarget.join(",");
   reactExports.useEffect(() => {
     if (targetKey !== prevCameraTarget.current) {
-      if (prevDepth.current === "hall" && depth !== "hall") {
-        savedHallPos.current.copy(camera.position);
-        if (controlsRef.current) {
-          savedHallLook.current.copy(controlsRef.current.target);
-        }
-      }
-      if (depth === "hall" && prevDepth.current !== "hall") {
-        targetPos.current.copy(savedHallPos.current);
-        targetLook.current.copy(savedHallLook.current);
-      } else {
-        targetPos.current.set(...cameraTarget);
-        targetLook.current.set(...cameraLookAt);
-      }
+      targetPos.current.set(...cameraTarget);
+      targetLook.current.set(...cameraLookAt);
+      _m.lookAt(
+        targetPos.current,
+        targetLook.current,
+        camera.up
+      );
+      finalQuat.current.setFromRotationMatrix(_m);
       if (controlsRef.current) {
         controlsRef.current.enabled = false;
       }
       isTransitioning.current = true;
       prevCameraTarget.current = targetKey;
-      prevDepth.current = depth;
     }
-  }, [targetKey, depth, camera]);
+  }, [targetKey, cameraTarget, cameraLookAt, camera]);
   reactExports.useEffect(() => {
     const navigateToHall = useHallStore.getState().navigateToHall;
     const exitConversation = useHallStore.getState().exitConversation;
@@ -74111,19 +74157,12 @@ function CameraController() {
     if (controlsRef.current) {
       controlsRef.current.target.lerp(targetLook.current, alpha);
     }
-    const lookDist = camera.position.distanceTo(targetLook.current);
-    if (lookDist > 1e-4) {
-      _scratchMatrix.lookAt(camera.position, targetLook.current, camera.up);
-      _scratchQuat.setFromRotationMatrix(_scratchMatrix);
-      camera.quaternion.slerp(_scratchQuat, alpha);
-    }
+    camera.quaternion.slerp(finalQuat.current, alpha);
     const dist = camera.position.distanceTo(targetPos.current);
     if (dist < ARRIVE_THRESHOLD) {
       isTransitioning.current = false;
       camera.position.copy(targetPos.current);
-      _scratchMatrix.lookAt(targetPos.current, targetLook.current, camera.up);
-      _scratchQuat.setFromRotationMatrix(_scratchMatrix);
-      camera.quaternion.copy(_scratchQuat);
+      camera.quaternion.copy(finalQuat.current);
       if (controlsRef.current) {
         controlsRef.current.target.copy(targetLook.current);
         controlsRef.current.enabled = true;
@@ -74192,6 +74231,7 @@ function HallLayout() {
   }, [setPolymaths, invalidate2]);
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(CameraController, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(EntranceCard, {}),
     polymaths.map((polymath) => {
       const { position, rotation } = getAlcoveTransform(polymath.ring, polymath.index);
       return /* @__PURE__ */ jsxRuntimeExports.jsx(

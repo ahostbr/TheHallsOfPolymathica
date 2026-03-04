@@ -14,10 +14,24 @@ export const ALCOVE_HEIGHT = 3.0
 export const ALCOVE_DEPTH = 2.0
 
 // Camera
-export const CAMERA_POSITION: Vector3Tuple = [0, 1.5, 0.01]
 export const CAMERA_FOV = 65
 export const CAMERA_NEAR = 0.1
 export const CAMERA_FAR = 100
+
+// Entrance card — the visual anchor the camera returns to on "Back to Hall".
+// Placed at angle π (180°), exactly between ring 0 alcoves 6 and 7.
+export const ENTRANCE_ANGLE = Math.PI
+export const ENTRANCE_Y = 0.15 // centered between ring 0 (y=-1.2) and ring 1 (y=1.5)
+export const ENTRANCE_POSITION: Vector3Tuple = [
+  Math.sin(ENTRANCE_ANGLE) * CYLINDER_RADIUS,  // ≈ 0
+  ENTRANCE_Y,
+  Math.cos(ENTRANCE_ANGLE) * CYLINDER_RADIUS,  // -12
+]
+
+// Camera "home" — at center, facing the entrance card on the wall.
+// OrbitControls target is 1 unit toward the entrance for responsive orbiting.
+export const ENTRANCE_CAMERA_POS: Vector3Tuple = [0, 0.5, 0.01]
+export const ENTRANCE_CAMERA_LOOK: Vector3Tuple = [0, 0.15, -4]
 
 // Navigation depths
 export const HALL_VIEW_DISTANCE = 0       // camera at origin

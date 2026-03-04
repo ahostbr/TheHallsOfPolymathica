@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useThree } from '@react-three/fiber'
 import { useHallStore } from '../store/hallStore'
 import { Alcove } from './Alcove'
+import { EntranceCard } from './EntranceCard'
 import { CameraController } from './CameraController'
 import {
   RING_0_COUNT,
@@ -51,6 +52,7 @@ export function HallLayout() {
   return (
     <>
       <CameraController />
+      <EntranceCard />
 
       {polymaths.map((polymath) => {
         const { position, rotation } = getAlcoveTransform(polymath.ring, polymath.index)
