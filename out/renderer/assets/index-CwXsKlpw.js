@@ -74042,7 +74042,9 @@ function Alcove({
     }
   );
 }
-const ARRIVE_THRESHOLD = 0.01;
+const ARRIVE_THRESHOLD = 1e-3;
+const _scratchMatrix = new Matrix4();
+const _scratchQuat = new Quaternion();
 function CameraController() {
   const { camera } = useThree();
   const controlsRef = reactExports.useRef(null);
@@ -74056,6 +74058,12 @@ function CameraController() {
   const depth = useHallStore((s) => s.depth);
   const cameraTarget = useHallStore((s) => s.cameraTarget);
   const cameraLookAt = useHallStore((s) => s.cameraLookAt);
+  reactExports.useEffect(() => {
+    if (controlsRef.current) {
+      controlsRef.current.target.set(0, 1, 0);
+      controlsRef.current.update();
+    }
+  }, []);
   const targetKey = cameraTarget.join(",");
   reactExports.useEffect(() => {
     if (targetKey !== prevCameraTarget.current) {
@@ -74068,9 +74076,11 @@ function CameraController() {
       if (depth === "hall" && prevDepth.current !== "hall") {
         targetPos.current.copy(savedHallPos.current);
         targetLook.current.copy(savedHallLook.current);
+      } else {
+        targetPos.current.set(...cameraTarget);
+        targetLook.current.set(...cameraLookAt);
       }
       if (controlsRef.current) {
-        controlsRef.current.saveState();
         controlsRef.current.enabled = false;
       }
       isTransitioning.current = true;
@@ -74092,26 +74102,32 @@ function CameraController() {
     return () => document.removeEventListener("keydown", handleKeyDown, true);
   }, []);
   useFrame((state2, delta) => {
-    if (depth === "hall" && isTransitioning.current) {
-      targetPos.current.copy(savedHallPos.current);
-      targetLook.current.copy(savedHallLook.current);
-    } else if (!isTransitioning.current || depth !== "hall") {
-      targetPos.current.set(...cameraTarget);
-      targetLook.current.set(...cameraLookAt);
+    if (!isTransitioning.current) {
+      state2.invalidate();
+      return;
     }
-    if (isTransitioning.current) {
-      camera.position.lerp(targetPos.current, 1 - Math.exp(-3 * delta));
+    const alpha = 1 - Math.exp(-5 * delta);
+    camera.position.lerp(targetPos.current, alpha);
+    if (controlsRef.current) {
+      controlsRef.current.target.lerp(targetLook.current, alpha);
+    }
+    const lookDist = camera.position.distanceTo(targetLook.current);
+    if (lookDist > 1e-4) {
+      _scratchMatrix.lookAt(camera.position, targetLook.current, camera.up);
+      _scratchQuat.setFromRotationMatrix(_scratchMatrix);
+      camera.quaternion.slerp(_scratchQuat, alpha);
+    }
+    const dist = camera.position.distanceTo(targetPos.current);
+    if (dist < ARRIVE_THRESHOLD) {
+      isTransitioning.current = false;
+      camera.position.copy(targetPos.current);
+      _scratchMatrix.lookAt(targetPos.current, targetLook.current, camera.up);
+      _scratchQuat.setFromRotationMatrix(_scratchMatrix);
+      camera.quaternion.copy(_scratchQuat);
       if (controlsRef.current) {
-        controlsRef.current.target.lerp(targetLook.current, 1 - Math.exp(-3 * delta));
-      }
-      const dist = camera.position.distanceTo(targetPos.current);
-      if (dist < ARRIVE_THRESHOLD) {
-        isTransitioning.current = false;
-        camera.position.copy(targetPos.current);
-        if (controlsRef.current) {
-          controlsRef.current.target.copy(targetLook.current);
-          controlsRef.current.enabled = true;
-        }
+        controlsRef.current.target.copy(targetLook.current);
+        controlsRef.current.enabled = true;
+        controlsRef.current.update();
       }
     }
     state2.invalidate();
@@ -74120,7 +74136,6 @@ function CameraController() {
     OrbitControls2,
     {
       ref: controlsRef,
-      target: [0, 1, 0],
       enableZoom: true,
       enableRotate: true,
       enablePan: false,
