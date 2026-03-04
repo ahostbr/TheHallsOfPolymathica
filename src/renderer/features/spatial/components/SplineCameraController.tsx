@@ -21,27 +21,30 @@ export function SplineCameraController() {
     if (!wingId) return null
     const wing = WINGS[wingId]
 
-    // Direction from rotunda center toward archway
+    // Direction from rotunda center toward archway (outward)
     const dir = new Vector3(...wing.archPosition).normalize()
+    const archDist = new Vector3(...wing.archPosition).length() // ~15
 
-    // Start: just inside the archway (~60% of rotunda radius)
+    // Start: just inside the archway (a few units before the arch)
+    const startDist = archDist - 3
     const start: [number, number, number] = [
-      dir.x * 9,
+      dir.x * startDist,
       1.5,
-      dir.z * 9,
+      dir.z * startDist,
     ]
 
-    // End: near the far end of the corridor
+    // End: near the far end of the corridor (archway + corridor length - margin)
+    const endDist = archDist + CORRIDOR_LENGTH - 8
     const end: [number, number, number] = [
-      dir.x * (CORRIDOR_LENGTH - 5),
+      dir.x * endDist,
       1.5,
-      dir.z * (CORRIDOR_LENGTH - 5),
+      dir.z * endDist,
     ]
 
     return { start, end, duration: flightDuration }
   }, [depth, activePolymathId, flightDuration])
 
-  const { advance, reset } = useSplineFlight(flightConfig)
+  const { advance, reset, progressRef } = useSplineFlight(flightConfig)
 
   // Reset when a new corridor flight starts
   const prevPolymathRef = useRef<string | null>(null)
@@ -61,7 +64,8 @@ export function SplineCameraController() {
     camera.position.copy(result.position)
     camera.lookAt(result.lookAt)
 
-    setCorridorProgress(result.completed ? 1 : 0)
+    // Report actual progress (0-1) so panels can reveal progressively
+    setCorridorProgress(result.completed ? 1 : progressRef.current)
 
     if (result.completed) {
       useHallStore.getState().arriveAtAlcove()

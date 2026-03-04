@@ -1,8 +1,9 @@
 import { useRef, useState } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import { HoloGlassPanel } from './HoloGlassPanel'
 import { HoloText } from './HoloText'
 import { CORRIDOR_WIDTH } from '../constants/layout'
+import { useHallStore } from '../store/hallStore'
 
 interface CorridorPanelProps {
   side: 'left' | 'right'
@@ -10,12 +11,12 @@ interface CorridorPanelProps {
   title: string
   content: string
   color: string
-  revealDistance?: number
+  /** Corridor progress (0-1) at which this panel reveals */
+  revealAt: number
 }
 
 const PANEL_WIDTH = 2.8
 const PANEL_HEIGHT = 3.5
-const REVEAL_DISTANCE = 8
 const REVEAL_SPEED = 3
 
 export function CorridorPanel({
@@ -24,9 +25,8 @@ export function CorridorPanel({
   title,
   content,
   color,
-  revealDistance = REVEAL_DISTANCE,
+  revealAt,
 }: CorridorPanelProps) {
-  const { camera } = useThree()
   const revealedRef = useRef(false)
   const opacityRef = useRef(0)
   const [visible, setVisible] = useState(false)
@@ -35,11 +35,21 @@ export function CorridorPanel({
   const rotY = side === 'left' ? Math.PI / 2 : -Math.PI / 2
 
   useFrame((state, delta) => {
-    const camZ = camera.position.z
-    if (!revealedRef.current && camZ <= zPosition + revealDistance) {
+    const progress = useHallStore.getState().corridorProgress
+    const depth = useHallStore.getState().depth
+
+    // Reveal based on corridor flight progress
+    if (!revealedRef.current && progress >= revealAt) {
       revealedRef.current = true
       setVisible(true)
     }
+
+    // At alcove depth, all panels should be visible (camera arrived)
+    if (!revealedRef.current && depth === 'alcove') {
+      revealedRef.current = true
+      setVisible(true)
+    }
+
     if (visible && opacityRef.current < 1) {
       opacityRef.current = Math.min(1, opacityRef.current + delta * REVEAL_SPEED)
       state.invalidate()

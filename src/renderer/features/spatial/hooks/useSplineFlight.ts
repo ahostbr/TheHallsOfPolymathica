@@ -47,8 +47,16 @@ export function useSplineFlight(config: SplineFlightConfig | null) {
     const t = smoothstep(progressRef.current)
 
     const position = curve.getPointAt(t)
-    const lookT = Math.min(1, t + 0.05)
-    const lookAt = curve.getPointAt(lookT)
+    // Look ahead on the curve. Near the end (t > 0.95), use the tangent
+    // direction instead of a point on the curve to avoid zero-length lookAt.
+    let lookAt: Vector3
+    if (t < 0.95) {
+      const lookT = Math.min(0.99, t + 0.05)
+      lookAt = curve.getPointAt(lookT)
+    } else {
+      const tangent = curve.getTangentAt(Math.min(t, 0.99))
+      lookAt = position.clone().add(tangent.multiplyScalar(2))
+    }
 
     if (progressRef.current >= 1) {
       completedRef.current = true

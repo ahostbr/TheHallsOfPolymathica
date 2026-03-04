@@ -69,7 +69,10 @@ export function Corridor({ polymathId, color, direction, origin }: CorridorProps
     ]
   }, [content])
 
-  const angle = Math.atan2(direction[0], direction[2])
+  // Panels are at negative local Z. We need local -Z to point OUTWARD from
+  // the archway. atan2(x,z) gives the angle FROM +Z toward the direction,
+  // but we need the opposite facing, so add PI.
+  const angle = Math.atan2(direction[0], direction[2]) + Math.PI
 
   return (
     <group position={origin} rotation={[0, angle, 0]}>
@@ -82,6 +85,7 @@ export function Corridor({ polymathId, color, direction, origin }: CorridorProps
           title={panel.title}
           content={panel.content}
           color={wingColor}
+          revealAt={(i + 1) / (panels.length + 1)}
         />
       ))}
     </group>

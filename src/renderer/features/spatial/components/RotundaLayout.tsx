@@ -56,7 +56,7 @@ export function RotundaLayout() {
           polymathId={activePolymath.id}
           color={activePolymath.color}
           direction={[activeWing.archPosition[0], 0, activeWing.archPosition[2]]}
-          origin={[0, 0, 0]}
+          origin={[activeWing.archPosition[0], 0, activeWing.archPosition[2]]}
         />
       )}
 
