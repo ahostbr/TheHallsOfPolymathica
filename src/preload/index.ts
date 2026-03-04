@@ -97,6 +97,11 @@ const api = {
   session: {
     spawn: (polymathId: string): Promise<string> =>
       ipcRenderer.invoke('session:spawn', polymathId),
+  },
+
+  corridor: {
+    getContent: (polymathId: string) => ipcRenderer.invoke('corridor:get-content', polymathId),
+    getAllContent: () => ipcRenderer.invoke('corridor:get-all-content'),
   }
 }
 

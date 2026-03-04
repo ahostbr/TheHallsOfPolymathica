@@ -8,6 +8,7 @@ import { PtyBridge } from './services/pty-bridge'
 import { SessionSpawner } from './services/session-spawner'
 import { getDb, upsertPolymath, closeDb } from './db/database'
 import { POLYMATH_REGISTRY } from './polymath-seed'
+import { initCorridorContent, getCorridorContent, getAllCorridorContent } from './services/agent-content-service'
 
 app.commandLine.appendSwitch('js-flags', '--max-old-space-size=1024')
 
@@ -116,6 +117,10 @@ function createWindow(): void {
     return sessionSpawner.spawn(polymathId, polymath.agentFile)
   })
 
+  // Corridor content IPC
+  ipcMain.handle('corridor:get-content', (_event, polymathId: string) => getCorridorContent(polymathId))
+  ipcMain.handle('corridor:get-all-content', () => getAllCorridorContent())
+
   // Register handlers
   try { registerPtyHandlers() } catch (e) { console.error('Failed to register pty handlers:', e) }
   try { registerDbHandlers() } catch (e) { console.error('Failed to register db handlers:', e) }
@@ -163,6 +168,7 @@ app.whenReady().then(async () => {
   }
 
   seedPolymaths()
+  initCorridorContent()
   createWindow()
 })
 
