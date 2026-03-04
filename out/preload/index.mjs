@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer, webFrame } from "electron";
 const api = {
   appInfo: {
     version: "1.0.0",
-    commitHash: "6234fab",
+    commitHash: "39d5f2f",
     buildDate: "2026-03-04",
     electronVersion: process.versions.electron,
     nodeVersion: process.versions.node,
@@ -76,7 +76,8 @@ const api = {
     save: (data) => ipcRenderer.invoke("settings:save", data)
   },
   session: {
-    spawn: (polymathId) => ipcRenderer.invoke("session:spawn", polymathId)
+    spawn: (polymathId) => ipcRenderer.invoke("session:spawn", polymathId),
+    getAgentPath: (polymathId) => ipcRenderer.invoke("session:get-agent-path", polymathId)
   },
   corridor: {
     getContent: (polymathId) => ipcRenderer.invoke("corridor:get-content", polymathId),

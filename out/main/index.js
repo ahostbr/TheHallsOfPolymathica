@@ -452,13 +452,13 @@ class SessionSpawner {
     return sessionId;
   }
 }
-const AGENT_BASE = "E:/SAS/CLONE/Kuroryuu-master/.claude/agents";
+const AGENT_BASE = app.isPackaged ? join(process.resourcesPath, "agents") : join(app.getAppPath(), "agents");
 const POLYMATH_REGISTRY = [
   {
     id: "feynman",
     name: "Richard Feynman",
     title: "First-Principles Reasoning",
-    agentFile: `${AGENT_BASE}/polymathic-feynman.md`,
+    agentFile: join(AGENT_BASE, "polymathic-feynman.md"),
     color: "#FF6B35",
     description: "The freshman test, play as cognitive strategy. Debugging, learning new domains, explaining complex concepts."
   },
@@ -466,7 +466,7 @@ const POLYMATH_REGISTRY = [
     id: "carmack",
     name: "John Carmack",
     title: "Constraint-First Engineering",
-    agentFile: `${AGENT_BASE}/polymathic-carmack.md`,
+    agentFile: join(AGENT_BASE, "polymathic-carmack.md"),
     color: "#00FF41",
     description: "Mathematical shortcuts, anti-abstraction discipline. Performance work, systems architecture, code review."
   },
@@ -474,7 +474,7 @@ const POLYMATH_REGISTRY = [
     id: "shannon",
     name: "Claude Shannon",
     title: "Signal & Noise Separation",
-    agentFile: `${AGENT_BASE}/polymathic-shannon.md`,
+    agentFile: join(AGENT_BASE, "polymathic-shannon.md"),
     color: "#00E5FF",
     description: "Radical reduction, invariant structure. API design, architecture simplification, compression."
   },
@@ -482,7 +482,7 @@ const POLYMATH_REGISTRY = [
     id: "tao",
     name: "Terence Tao",
     title: "Structured Exploration",
-    agentFile: `${AGENT_BASE}/polymathic-tao.md`,
+    agentFile: join(AGENT_BASE, "polymathic-tao.md"),
     color: "#9D4EDD",
     description: "Cross-field arbitrage, structure-randomness decomposition. Complex problem decomposition, research strategy."
   },
@@ -490,7 +490,7 @@ const POLYMATH_REGISTRY = [
     id: "davinci",
     name: "Leonardo da Vinci",
     title: "Saper Vedere",
-    agentFile: `${AGENT_BASE}/polymathic-davinci.md`,
+    agentFile: join(AGENT_BASE, "polymathic-davinci.md"),
     color: "#FFD700",
     description: "Knowing how to see, mechanism-hunting, cross-domain transfer. Bio-inspired design, innovation."
   },
@@ -498,7 +498,7 @@ const POLYMATH_REGISTRY = [
     id: "lovelace",
     name: "Ada Lovelace",
     title: "Poetical Science",
-    agentFile: `${AGENT_BASE}/polymathic-lovelace.md`,
+    agentFile: join(AGENT_BASE, "polymathic-lovelace.md"),
     color: "#FF69B4",
     description: "Operational structure, pattern abstraction. Technology visioning, system abstraction, cross-domain synthesis."
   },
@@ -506,7 +506,7 @@ const POLYMATH_REGISTRY = [
     id: "vangogh",
     name: "Vincent van Gogh",
     title: "Emotional Truth Engineering",
-    agentFile: `${AGENT_BASE}/polymathic-vangogh.md`,
+    agentFile: join(AGENT_BASE, "polymathic-vangogh.md"),
     color: "#FFA500",
     description: "Color as engineered language, intentional rule-breaking. UI/UX design, color systems, emotional design."
   },
@@ -514,7 +514,7 @@ const POLYMATH_REGISTRY = [
     id: "tesla",
     name: "Nikola Tesla",
     title: "Mental Simulation",
-    agentFile: `${AGENT_BASE}/polymathic-tesla.md`,
+    agentFile: join(AGENT_BASE, "polymathic-tesla.md"),
     color: "#00BFFF",
     description: "Complete systems thinking, anti-trial-and-error. Systems architecture, infrastructure design, API design."
   },
@@ -522,7 +522,7 @@ const POLYMATH_REGISTRY = [
     id: "jobs",
     name: "Steve Jobs",
     title: "Intersection of Tech & Humanities",
-    agentFile: `${AGENT_BASE}/polymathic-jobs.md`,
+    agentFile: join(AGENT_BASE, "polymathic-jobs.md"),
     color: "#EEEEEE",
     description: "Taste, radical simplification, reality distortion. Product vision, UX simplification, feature pruning."
   },
@@ -530,7 +530,7 @@ const POLYMATH_REGISTRY = [
     id: "gates",
     name: "Bill Gates",
     title: "Platform Thinking",
-    agentFile: `${AGENT_BASE}/polymathic-gates.md`,
+    agentFile: join(AGENT_BASE, "polymathic-gates.md"),
     color: "#0078D4",
     description: "Systematic deep-reading, decomposition into atomic components. Platform strategy, ecosystem design."
   },
@@ -538,7 +538,7 @@ const POLYMATH_REGISTRY = [
     id: "linus",
     name: "Linus Torvalds",
     title: "Good Taste in Code",
-    agentFile: `${AGENT_BASE}/polymathic-linus.md`,
+    agentFile: join(AGENT_BASE, "polymathic-linus.md"),
     color: "#F0DB4F",
     description: "Structural elegance, working code as valid argument, pragmatic empiricism. Code review, architecture taste."
   },
@@ -546,7 +546,7 @@ const POLYMATH_REGISTRY = [
     id: "graham",
     name: "Paul Graham",
     title: "Essay-Driven Clarity",
-    agentFile: `${AGENT_BASE}/polymathic-graham.md`,
+    agentFile: join(AGENT_BASE, "polymathic-graham.md"),
     color: "#FF4500",
     description: "Pattern observation, unscaled experimentation. Startup strategy, product-market fit, founder evaluation."
   },
@@ -554,7 +554,7 @@ const POLYMATH_REGISTRY = [
     id: "bezos",
     name: "Jeff Bezos",
     title: "Working Backwards",
-    agentFile: `${AGENT_BASE}/polymathic-bezos.md`,
+    agentFile: join(AGENT_BASE, "polymathic-bezos.md"),
     color: "#FF9900",
     description: "PR/FAQ forcing functions, two-way vs one-way door decisions. Customer-obsessed design, product strategy."
   },
@@ -562,7 +562,7 @@ const POLYMATH_REGISTRY = [
     id: "andreessen",
     name: "Marc Andreessen",
     title: "Technological Discontinuities",
-    agentFile: `${AGENT_BASE}/polymathic-andreessen.md`,
+    agentFile: join(AGENT_BASE, "polymathic-andreessen.md"),
     color: "#1DA1F2",
     description: "Holding opinions loosely, cross-domain pattern synthesis. Market timing, technology adoption curves."
   },
@@ -570,7 +570,7 @@ const POLYMATH_REGISTRY = [
     id: "ogilvy",
     name: "David Ogilvy",
     title: "Research-First Advertising",
-    agentFile: `${AGENT_BASE}/polymathic-ogilvy.md`,
+    agentFile: join(AGENT_BASE, "polymathic-ogilvy.md"),
     color: "#DC143C",
     description: "80/20 headline rule, direct response methodology. Copywriting, ad strategy, research-first marketing."
   },
@@ -578,7 +578,7 @@ const POLYMATH_REGISTRY = [
     id: "aurelius",
     name: "Marcus Aurelius",
     title: "Stoic Deliberation",
-    agentFile: `${AGENT_BASE}/polymathic-aurelius.md`,
+    agentFile: join(AGENT_BASE, "polymathic-aurelius.md"),
     color: "#C0C0C0",
     description: "Dichotomy of control, premeditatio malorum, obstacle as the way. Decision-making under pressure."
   },
@@ -586,7 +586,7 @@ const POLYMATH_REGISTRY = [
     id: "godin",
     name: "Seth Godin",
     title: "Smallest Viable Audience",
-    agentFile: `${AGENT_BASE}/polymathic-godin.md`,
+    agentFile: join(AGENT_BASE, "polymathic-godin.md"),
     color: "#8B5CF6",
     description: "Worldview-first positioning, permission over interruption. Marketing strategy, audience building."
   },
@@ -594,7 +594,7 @@ const POLYMATH_REGISTRY = [
     id: "thiel",
     name: "Peter Thiel",
     title: "Zero to One",
-    agentFile: `${AGENT_BASE}/polymathic-thiel.md`,
+    agentFile: join(AGENT_BASE, "polymathic-thiel.md"),
     color: "#00FF88",
     description: "Finding secrets, monopoly theory. Contrarian analysis, monopoly strategy, category creation."
   },
@@ -602,7 +602,7 @@ const POLYMATH_REGISTRY = [
     id: "disney",
     name: "Walt Disney",
     title: "Dreamer / Realist / Critic",
-    agentFile: `${AGENT_BASE}/polymathic-disney.md`,
+    agentFile: join(AGENT_BASE, "polymathic-disney.md"),
     color: "#FF1493",
     description: "Storyboarding, Plussing, Blue Sky ideation. Experience design, creative strategy."
   },
@@ -610,7 +610,7 @@ const POLYMATH_REGISTRY = [
     id: "munger",
     name: "Charlie Munger",
     title: "Mental Model Lattice",
-    agentFile: `${AGENT_BASE}/polymathic-munger.md`,
+    agentFile: join(AGENT_BASE, "polymathic-munger.md"),
     color: "#B8860B",
     description: "Inversion thinking, Lollapalooza effects. Decision frameworks, risk analysis, bias detection."
   },
@@ -618,7 +618,7 @@ const POLYMATH_REGISTRY = [
     id: "suntzu",
     name: "Sun Tzu",
     title: "Strategic Intelligence",
-    agentFile: `${AGENT_BASE}/polymathic-suntzu.md`,
+    agentFile: join(AGENT_BASE, "polymathic-suntzu.md"),
     color: "#8B0000",
     description: "Winning before fighting, terrain analysis. Competitive strategy, positioning, resource allocation."
   },
@@ -626,7 +626,7 @@ const POLYMATH_REGISTRY = [
     id: "socrates",
     name: "Socrates",
     title: "Elenctic Examination",
-    agentFile: `${AGENT_BASE}/polymathic-socrates.md`,
+    agentFile: join(AGENT_BASE, "polymathic-socrates.md"),
     color: "#E0E0E0",
     description: "Maieutics, aporia as productive confusion. Assumption testing, dialectic questioning."
   },
@@ -634,7 +634,7 @@ const POLYMATH_REGISTRY = [
     id: "musk",
     name: "Elon Musk",
     title: "Physics-Constrained Reasoning",
-    agentFile: `${AGENT_BASE}/polymathic-musk.md`,
+    agentFile: join(AGENT_BASE, "polymathic-musk.md"),
     color: "#E04230",
     description: "Questioning every requirement, aggressive deletion before optimization. Moonshot feasibility."
   },
@@ -642,7 +642,7 @@ const POLYMATH_REGISTRY = [
     id: "mrbeast",
     name: "MrBeast",
     title: "Attention Engineering",
-    agentFile: `${AGENT_BASE}/polymathic-mrbeast.md`,
+    agentFile: join(AGENT_BASE, "polymathic-mrbeast.md"),
     color: "#00CFFF",
     description: "Retention curve analysis, 50+ variation testing. Content strategy, viral mechanics."
   },
@@ -650,7 +650,7 @@ const POLYMATH_REGISTRY = [
     id: "rams",
     name: "Dieter Rams",
     title: "Less But Better",
-    agentFile: `${AGENT_BASE}/polymathic-rams.md`,
+    agentFile: join(AGENT_BASE, "polymathic-rams.md"),
     color: "#666666",
     description: "Functionalism, material honesty, 10 Principles of Good Design. Product design, UI simplification."
   }
@@ -809,6 +809,11 @@ function createWindow() {
     const polymath = POLYMATH_REGISTRY.find((p) => p.id === polymathId);
     if (!polymath) throw new Error(`Unknown polymath: ${polymathId}`);
     return sessionSpawner.spawn(polymathId, polymath.agentFile);
+  });
+  ipcMain.handle("session:get-agent-path", (_e, polymathId) => {
+    const polymath = POLYMATH_REGISTRY.find((p) => p.id === polymathId);
+    if (!polymath) throw new Error(`Unknown polymath: ${polymathId}`);
+    return polymath.agentFile;
   });
   ipcMain.handle("corridor:get-content", (_event, polymathId) => getCorridorContent(polymathId));
   ipcMain.handle("corridor:get-all-content", () => getAllCorridorContent());
