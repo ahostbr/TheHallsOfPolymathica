@@ -31,7 +31,7 @@ export function PolymathPortrait({
         <meshBasicMaterial map={texture} toneMapped={false} />
       </mesh>
 
-      <lineSegments geometry={edgesGeo}>
+      <lineSegments geometry={edgesGeo} raycast={() => null}>
         <lineBasicMaterial color={color} transparent opacity={0.4} />
       </lineSegments>
     </group>

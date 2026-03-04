@@ -31,7 +31,7 @@ export function HoloGlassPanel({
 
   return (
     <group position={position} rotation={rotation}>
-      <mesh ref={meshRef}>
+      <mesh ref={meshRef} raycast={() => null}>
         <planeGeometry args={[width, height]} />
         <MeshTransmissionMaterial
           transmission={0.92}
