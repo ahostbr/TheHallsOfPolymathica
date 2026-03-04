@@ -1,12 +1,30 @@
 import type { Vector3Tuple } from 'three'
 
-// Cylindrical hall dimensions
-export const CYLINDER_RADIUS = 12
-export const RING_COUNT = 2
-export const RING_0_COUNT = 13  // bottom ring
-export const RING_1_COUNT = 12  // top ring (half-step angular offset)
-export const RING_Y_POSITIONS = [-1.2, 1.5] as const
-export const TOTAL_POLYMATHS = RING_0_COUNT + RING_1_COUNT // 25
+// Legacy cylindrical layout — retained for getAlcoveTransform / getAlcoveCameraTarget
+const CYLINDER_RADIUS = 12
+const RING_Y_POSITIONS = [-1.2, 1.5] as const
+
+// Ring counts — used by HallLayout.tsx for mapping polymaths from DB
+export const RING_0_COUNT = 13 // bottom ring
+export const RING_1_COUNT = 12 // top ring (half-step angular offset)
+
+// Rotunda
+export const ROTUNDA_RADIUS = 15
+export const ROTUNDA_HEIGHT = 8
+export const ROTUNDA_CAMERA_POS: Vector3Tuple = [0, 1.5, 0]
+export const ROTUNDA_CAMERA_LOOK: Vector3Tuple = [0, 1.5, 15]
+
+// Archway dimensions
+export const ARCHWAY_WIDTH = 5
+export const ARCHWAY_HEIGHT = 7
+export const ARCHWAY_DEPTH = 1.5
+
+// Corridor
+export const CORRIDOR_LENGTH = 40
+export const CORRIDOR_WIDTH = 4
+export const CORRIDOR_HEIGHT = 5
+export const CORRIDOR_PANEL_COUNT = 5
+export const CORRIDOR_PANEL_SPACING = 7
 
 // Alcove dimensions
 export const ALCOVE_WIDTH = 3.2
@@ -18,25 +36,15 @@ export const CAMERA_FOV = 65
 export const CAMERA_NEAR = 0.1
 export const CAMERA_FAR = 100
 
-// Entrance card — the visual anchor the camera returns to on "Back to Hall".
-// Placed at angle π (180°), exactly between ring 0 alcoves 6 and 7.
-export const ENTRANCE_ANGLE = Math.PI
-export const ENTRANCE_Y = 0.15 // centered between ring 0 (y=-1.2) and ring 1 (y=1.5)
-export const ENTRANCE_POSITION: Vector3Tuple = [
-  Math.sin(ENTRANCE_ANGLE) * CYLINDER_RADIUS,  // ≈ 0
-  ENTRANCE_Y,
-  Math.cos(ENTRANCE_ANGLE) * CYLINDER_RADIUS,  // -12
-]
-
-// Camera "home" — at center, facing the entrance card on the wall.
-// OrbitControls target is 1 unit toward the entrance for responsive orbiting.
-export const ENTRANCE_CAMERA_POS: Vector3Tuple = [0, 0.5, 0.01]
-export const ENTRANCE_CAMERA_LOOK: Vector3Tuple = [0, 0.15, -4]
-
 // Navigation depths
-export const HALL_VIEW_DISTANCE = 0       // camera at origin
-export const ALCOVE_VIEW_DISTANCE = 2     // approach distance from center (10 units from wall)
+export const ALCOVE_VIEW_DISTANCE = 2 // approach distance from center (10 units from wall)
 export const CONVERSATION_VIEW_DISTANCE = 4 // closer for terminal interaction
+export const WING_VIEW_DISTANCE = 8
+
+// Flight duration
+export const DEFAULT_FLIGHT_DURATION = 5
+export const MIN_FLIGHT_DURATION = 3
+export const MAX_FLIGHT_DURATION = 20
 
 // Panel sizes within an alcove
 export const PORTRAIT_WIDTH = 1.8
@@ -56,7 +64,7 @@ export function getAlcoveTransform(ring: number, index: number): {
   rotation: Vector3Tuple
 } {
   const count = ring === 0 ? RING_0_COUNT : RING_1_COUNT
-  const angularOffset = ring === 1 ? Math.PI / RING_0_COUNT : 0  // half-step offset for ring 1
+  const angularOffset = ring === 1 ? Math.PI / RING_0_COUNT : 0 // half-step offset for ring 1
   const angle = (index / count) * Math.PI * 2 + angularOffset
 
   const x = Math.sin(angle) * CYLINDER_RADIUS

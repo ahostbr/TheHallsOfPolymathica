@@ -1,12 +1,19 @@
 import type { Vector3Tuple } from 'three'
 import { HoloGlassPanel } from './HoloGlassPanel'
 import { HoloText } from './HoloText'
-import { ENTRANCE_POSITION, ENTRANCE_ANGLE } from '../constants/layout'
+import { ROTUNDA_RADIUS } from '../constants/layout'
 
 const COLOR = '#00e5ff'
 
+// Entrance card sits at angle PI on the rotunda wall (will be replaced by rotunda hub in later tasks)
+const ENTRANCE_ANGLE = Math.PI
+
 export function EntranceCard() {
-  const position: Vector3Tuple = ENTRANCE_POSITION
+  const position: Vector3Tuple = [
+    Math.sin(ENTRANCE_ANGLE) * ROTUNDA_RADIUS,
+    0.15,
+    Math.cos(ENTRANCE_ANGLE) * ROTUNDA_RADIUS,
+  ]
   // Face inward (toward camera at origin)
   const rotation: Vector3Tuple = [0, ENTRANCE_ANGLE + Math.PI, 0]
 

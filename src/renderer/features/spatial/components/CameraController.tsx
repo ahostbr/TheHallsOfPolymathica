@@ -3,7 +3,7 @@ import { useFrame, useThree } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { Vector3, Quaternion, Matrix4 } from 'three'
 import { useHallStore } from '../store/hallStore'
-import { ENTRANCE_CAMERA_POS } from '../constants/layout'
+import { ROTUNDA_CAMERA_POS } from '../constants/layout'
 
 const LERP_SPEED = 5
 const ARRIVE_THRESHOLD = 0.001
@@ -17,7 +17,7 @@ export function CameraController() {
   const targetLook = useRef(new Vector3())
   const finalQuat = useRef(new Quaternion())
   const isTransitioning = useRef(false)
-  const prevCameraTarget = useRef<string>(ENTRANCE_CAMERA_POS.join(','))
+  const prevCameraTarget = useRef<string>(ROTUNDA_CAMERA_POS.join(','))
 
   const cameraTarget = useHallStore((s) => s.cameraTarget)
   const cameraLookAt = useHallStore((s) => s.cameraLookAt)
