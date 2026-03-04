@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer, webFrame } from "electron";
 const api = {
   appInfo: {
     version: "1.0.0",
-    commitHash: "2b02fca",
+    commitHash: "86c1866",
     buildDate: "2026-03-04",
     electronVersion: process.versions.electron,
     nodeVersion: process.versions.node,
@@ -77,6 +77,10 @@ const api = {
   },
   session: {
     spawn: (polymathId) => ipcRenderer.invoke("session:spawn", polymathId)
+  },
+  corridor: {
+    getContent: (polymathId) => ipcRenderer.invoke("corridor:get-content", polymathId),
+    getAllContent: () => ipcRenderer.invoke("corridor:get-all-content")
   }
 };
 contextBridge.exposeInMainWorld("api", api);

@@ -12780,7 +12780,7 @@ function damp(x2, y, lambda, dt2) {
 function pingpong(x2, length = 1) {
   return length - Math.abs(euclideanModulo(x2, length * 2) - length);
 }
-function smoothstep(x2, min, max) {
+function smoothstep$1(x2, min, max) {
   if (x2 <= min) return 0;
   if (x2 >= max) return 1;
   x2 = (x2 - min) / (max - min);
@@ -12908,7 +12908,7 @@ const MathUtils = {
   lerp,
   damp,
   pingpong,
-  smoothstep,
+  smoothstep: smoothstep$1,
   smootherstep,
   randInt,
   randFloat,
@@ -45730,10 +45730,10 @@ function Kb() {
       function _p(t2, r2, a2, l2, c2, d) {
         var h2 = t2.pendingLanes;
         t2.pendingLanes = a2, t2.suspendedLanes = 0, t2.pingedLanes = 0, t2.warmLanes = 0, t2.expiredLanes &= a2, t2.entangledLanes &= a2, t2.errorRecoveryDisabledLanes &= a2, t2.shellSuspendCounter = 0;
-        var y = t2.entanglements, R = t2.expirationTimes, L = t2.hiddenUpdates;
+        var y = t2.entanglements, R2 = t2.expirationTimes, L = t2.hiddenUpdates;
         for (a2 = h2 & ~a2; 0 < a2; ) {
           var j2 = 31 - vt2(a2), A = 1 << j2;
-          y[j2] = 0, R[j2] = -1;
+          y[j2] = 0, R2[j2] = -1;
           var W2 = L[j2];
           if (W2 !== null) for (L[j2] = null, j2 = 0; j2 < W2.length; j2++) {
             var V = W2[j2];
@@ -45875,17 +45875,17 @@ function Kb() {
           });
           var d = l2.DetermineComponentFrameRoot(), h2 = d[0], y = d[1];
           if (h2 && y) {
-            var R = h2.split(`
+            var R2 = h2.split(`
 `), L = y.split(`
 `);
-            for (c2 = l2 = 0; l2 < R.length && !R[l2].includes("DetermineComponentFrameRoot"); ) l2++;
+            for (c2 = l2 = 0; l2 < R2.length && !R2[l2].includes("DetermineComponentFrameRoot"); ) l2++;
             for (; c2 < L.length && !L[c2].includes("DetermineComponentFrameRoot"); ) c2++;
-            if (l2 === R.length || c2 === L.length) for (l2 = R.length - 1, c2 = L.length - 1; 1 <= l2 && 0 <= c2 && R[l2] !== L[c2]; ) c2--;
-            for (; 1 <= l2 && 0 <= c2; l2--, c2--) if (R[l2] !== L[c2]) {
+            if (l2 === R2.length || c2 === L.length) for (l2 = R2.length - 1, c2 = L.length - 1; 1 <= l2 && 0 <= c2 && R2[l2] !== L[c2]; ) c2--;
+            for (; 1 <= l2 && 0 <= c2; l2--, c2--) if (R2[l2] !== L[c2]) {
               if (l2 !== 1 || c2 !== 1) do
-                if (l2--, c2--, 0 > c2 || R[l2] !== L[c2]) {
+                if (l2--, c2--, 0 > c2 || R2[l2] !== L[c2]) {
                   var j2 = `
-` + R[l2].replace(" at new ", " at ");
+` + R2[l2].replace(" at new ", " at ");
                   return t2.displayName && j2.includes("<anonymous>") && (j2 = j2.replace("<anonymous>", t2.displayName)), j2;
                 }
               while (1 <= l2 && 0 <= c2);
@@ -46060,7 +46060,7 @@ Error generating stack: ` + l2.message + `
             e: for (; d !== null; ) {
               var y = d;
               d = c2;
-              for (var R = 0; R < r2.length; R++) if (y.context === r2[R]) {
+              for (var R2 = 0; R2 < r2.length; R2++) if (y.context === r2[R2]) {
                 d.lanes |= a2, y = d.alternate, y !== null && (y.lanes |= a2), Ot(d.return, a2, t2), l2 || (h2 = null);
                 break e;
               }
@@ -46191,8 +46191,8 @@ Error generating stack: ` + l2.message + `
       }
       function vu(t2, r2) {
         for (var a2 = t2.suspendedLanes, l2 = t2.pingedLanes, c2 = t2.expirationTimes, d = t2.pendingLanes & -62914561; 0 < d; ) {
-          var h2 = 31 - vt2(d), y = 1 << h2, R = c2[h2];
-          R === -1 ? ((y & a2) === 0 || (y & l2) !== 0) && (c2[h2] = Tp(y, r2)) : R <= r2 && (t2.expiredLanes |= y), d &= ~y;
+          var h2 = 31 - vt2(d), y = 1 << h2, R2 = c2[h2];
+          R2 === -1 ? ((y & a2) === 0 || (y & l2) !== 0) && (c2[h2] = Tp(y, r2)) : R2 <= r2 && (t2.expiredLanes |= y), d &= ~y;
         }
         if (r2 = Ne, a2 = he, a2 = Lr(t2, t2 === r2 ? a2 : 0, t2.cancelPendingCommit !== null || t2.timeoutHandle !== Lo), l2 = t2.callbackNode, a2 === 0 || t2 === r2 && (_e === 2 || _e === 9) || t2.cancelPendingCommit !== null) return l2 !== null && l2 !== null && le2(l2), t2.callbackNode = null, t2.callbackPriority = 0;
         if ((a2 & 3) === 0 || Pi(t2, a2)) {
@@ -46388,7 +46388,7 @@ Error generating stack: ` + l2.message + `
         function y(P2, w, C, H) {
           return w === null || w.tag !== 6 ? (w = Ps(C, P2.mode, H), w.return = P2, w) : (w = c2(w, C), w.return = P2, w);
         }
-        function R(P2, w, C, H) {
+        function R2(P2, w, C, H) {
           var Q = C.type;
           return Q === $a ? j2(P2, w, C.props.children, H, C.key) : w !== null && (w.elementType === Q || typeof Q == "object" && Q !== null && Q.$$typeof === ua && pt(Q) === w.type) ? (w = c2(w, C.props), La(w, C), w.return = P2, w) : (w = ws(C.type, C.key, C.props, null, P2.mode, H), La(w, C), w.return = P2, w);
         }
@@ -46422,7 +46422,7 @@ Error generating stack: ` + l2.message + `
           if (typeof C == "object" && C !== null) {
             switch (C.$$typeof) {
               case zs:
-                return C.key === Q ? R(P2, w, C, H) : null;
+                return C.key === Q ? R2(P2, w, C, H) : null;
               case sa:
                 return C.key === Q ? L(P2, w, C, H) : null;
               case ua:
@@ -46440,7 +46440,7 @@ Error generating stack: ` + l2.message + `
           if (typeof H == "object" && H !== null) {
             switch (H.$$typeof) {
               case zs:
-                return P2 = P2.get(H.key === null ? C : H.key) || null, R(w, P2, H, Q);
+                return P2 = P2.get(H.key === null ? C : H.key) || null, R2(w, P2, H, Q);
               case sa:
                 return P2 = P2.get(H.key === null ? C : H.key) || null, L(w, P2, H, Q);
               case ua:
@@ -46686,14 +46686,14 @@ Error generating stack: ` + l2.message + `
         var d = c2.firstBaseUpdate, h2 = c2.lastBaseUpdate, y = c2.shared.pending;
         if (y !== null) {
           c2.shared.pending = null;
-          var R = y, L = R.next;
-          R.next = null, h2 === null ? d = L : h2.next = L, h2 = R;
+          var R2 = y, L = R2.next;
+          R2.next = null, h2 === null ? d = L : h2.next = L, h2 = R2;
           var j2 = t2.alternate;
-          j2 !== null && (j2 = j2.updateQueue, y = j2.lastBaseUpdate, y !== h2 && (y === null ? j2.firstBaseUpdate = L : y.next = L, j2.lastBaseUpdate = R));
+          j2 !== null && (j2 = j2.updateQueue, y = j2.lastBaseUpdate, y !== h2 && (y === null ? j2.firstBaseUpdate = L : y.next = L, j2.lastBaseUpdate = R2));
         }
         if (d !== null) {
           var A = c2.baseState;
-          h2 = 0, j2 = L = R = null, y = d;
+          h2 = 0, j2 = L = R2 = null, y = d;
           do {
             var W2 = y.lane & -536870913, V = W2 !== y.lane;
             if (V ? (he & W2) === W2 : (l2 & W2) === W2) {
@@ -46733,13 +46733,13 @@ Error generating stack: ` + l2.message + `
               payload: y.payload,
               callback: y.callback,
               next: null
-            }, j2 === null ? (L = j2 = V, R = A) : j2 = j2.next = V, h2 |= W2;
+            }, j2 === null ? (L = j2 = V, R2 = A) : j2 = j2.next = V, h2 |= W2;
             if (y = y.next, y === null) {
               if (y = c2.shared.pending, y === null) break;
               V = y, y = V.next, V.next = null, c2.lastBaseUpdate = V, c2.shared.pending = null;
             }
           } while (true);
-          j2 === null && (R = A), c2.baseState = R, c2.firstBaseUpdate = L, c2.lastBaseUpdate = j2, d === null && (c2.shared.lanes = 0), ba |= h2, t2.lanes = h2, t2.memoizedState = A;
+          j2 === null && (R2 = A), c2.baseState = R2, c2.firstBaseUpdate = L, c2.lastBaseUpdate = j2, d === null && (c2.shared.lanes = 0), ba |= h2, t2.lanes = h2, t2.memoizedState = A;
         }
       }
       function Dd(t2, r2) {
@@ -46933,12 +46933,12 @@ Error generating stack: ` + l2.message + `
         if (d = t2.baseState, c2 === null) t2.memoizedState = d;
         else {
           r2 = c2.next;
-          var y = h2 = null, R = null, L = r2, j2 = false;
+          var y = h2 = null, R2 = null, L = r2, j2 = false;
           do {
             var A = L.lane & -536870913;
             if (A !== L.lane ? (he & A) === A : (Wo & A) === A) {
               var W2 = L.revertLane;
-              if (W2 === 0) R !== null && (R = R.next = {
+              if (W2 === 0) R2 !== null && (R2 = R2.next = {
                 lane: 0,
                 revertLane: 0,
                 gesture: null,
@@ -46958,7 +46958,7 @@ Error generating stack: ` + l2.message + `
                 hasEagerState: L.hasEagerState,
                 eagerState: L.eagerState,
                 next: null
-              }, R === null ? (y = R = A, h2 = d) : R = R.next = A, ne.lanes |= W2, ba |= W2;
+              }, R2 === null ? (y = R2 = A, h2 = d) : R2 = R2.next = A, ne.lanes |= W2, ba |= W2;
               A = L.action, oi && a2(d, A), d = L.hasEagerState ? L.eagerState : a2(d, A);
             } else W2 = {
               lane: A,
@@ -46968,11 +46968,11 @@ Error generating stack: ` + l2.message + `
               hasEagerState: L.hasEagerState,
               eagerState: L.eagerState,
               next: null
-            }, R === null ? (y = R = W2, h2 = d) : R = R.next = W2, ne.lanes |= A, ba |= A;
+            }, R2 === null ? (y = R2 = W2, h2 = d) : R2 = R2.next = W2, ne.lanes |= A, ba |= A;
             L = L.next;
           } while (L !== null && L !== r2);
-          if (R === null ? h2 = d : R.next = y, !jn(d, t2.memoizedState) && (hn = true, j2 && (a2 = ul, a2 !== null))) throw a2;
-          t2.memoizedState = d, t2.baseState = h2, t2.baseQueue = R, l2.lastRenderedState = d;
+          if (R2 === null ? h2 = d : R2.next = y, !jn(d, t2.memoizedState) && (hn = true, j2 && (a2 = ul, a2 !== null))) throw a2;
+          t2.memoizedState = d, t2.baseState = h2, t2.baseQueue = R2, l2.lastRenderedState = d;
         }
         return c2 === null && (l2.lanes = 0), [t2.memoizedState, l2.dispatch];
       }
@@ -47083,8 +47083,8 @@ Error generating stack: ` + l2.message + `
           var d = M.T, h2 = {};
           M.T = h2;
           try {
-            var y = a2(c2, l2), R = M.S;
-            R !== null && R(h2, y), dr(t2, r2, y);
+            var y = a2(c2, l2), R2 = M.S;
+            R2 !== null && R2(h2, y), dr(t2, r2, y);
           } catch (L) {
             Jl(t2, r2, L);
           } finally {
@@ -47291,9 +47291,9 @@ Error generating stack: ` + l2.message + `
         var h2 = M.T, y = {};
         M.T = y, Wi(t2, false, r2, a2);
         try {
-          var R = c2(), L = M.S;
-          if (L !== null && L(y, R), R !== null && typeof R == "object" && typeof R.then == "function") {
-            var j2 = ho(R, l2);
+          var R2 = c2(), L = M.S;
+          if (L !== null && L(y, R2), R2 !== null && typeof R2 == "object" && typeof R2.then == "function") {
+            var j2 = ho(R2, l2);
             ea(t2, r2, j2, bt(t2));
           } else ea(t2, r2, l2, bt(t2));
         } catch (A) {
@@ -47681,18 +47681,18 @@ Error generating stack: ` + l2.message + `
           typeof h2 == "object" && h2 !== null && (d = In(h2)), d = new a2(l2, d), r2.memoizedState = d.state !== null && d.state !== void 0 ? d.state : null, d.updater = Oc, r2.stateNode = d, d._reactInternals = r2, d = r2.stateNode, d.props = l2, d.state = r2.memoizedState, d.refs = {}, Ol(r2), h2 = a2.contextType, d.context = typeof h2 == "object" && h2 !== null ? In(h2) : Ka, d.state = r2.memoizedState, h2 = a2.getDerivedStateFromProps, typeof h2 == "function" && (Fu(r2, a2, h2, l2), d.state = r2.memoizedState), typeof a2.getDerivedStateFromProps == "function" || typeof d.getSnapshotBeforeUpdate == "function" || typeof d.UNSAFE_componentWillMount != "function" && typeof d.componentWillMount != "function" || (h2 = d.state, typeof d.componentWillMount == "function" && d.componentWillMount(), typeof d.UNSAFE_componentWillMount == "function" && d.UNSAFE_componentWillMount(), h2 !== d.state && Oc.enqueueReplaceState(d, d.state, null), Aa(r2, l2, d, c2), Li(), d.state = r2.memoizedState), typeof d.componentDidMount == "function" && (r2.flags |= 4194308), l2 = true;
         } else if (t2 === null) {
           d = r2.stateNode;
-          var y = r2.memoizedProps, R = Wr(a2, y);
-          d.props = R;
+          var y = r2.memoizedProps, R2 = Wr(a2, y);
+          d.props = R2;
           var L = d.context, j2 = a2.contextType;
           h2 = Ka, typeof j2 == "object" && j2 !== null && (h2 = In(j2));
           var A = a2.getDerivedStateFromProps;
           j2 = typeof A == "function" || typeof d.getSnapshotBeforeUpdate == "function", y = r2.pendingProps !== y, j2 || typeof d.UNSAFE_componentWillReceiveProps != "function" && typeof d.componentWillReceiveProps != "function" || (y || L !== h2) && Jd(r2, d, l2, h2), ma = false;
           var W2 = r2.memoizedState;
-          d.state = W2, Aa(r2, l2, d, c2), Li(), L = r2.memoizedState, y || W2 !== L || ma ? (typeof A == "function" && (Fu(r2, a2, A, l2), L = r2.memoizedState), (R = ma || ts(r2, a2, R, l2, W2, L, h2)) ? (j2 || typeof d.UNSAFE_componentWillMount != "function" && typeof d.componentWillMount != "function" || (typeof d.componentWillMount == "function" && d.componentWillMount(), typeof d.UNSAFE_componentWillMount == "function" && d.UNSAFE_componentWillMount()), typeof d.componentDidMount == "function" && (r2.flags |= 4194308)) : (typeof d.componentDidMount == "function" && (r2.flags |= 4194308), r2.memoizedProps = l2, r2.memoizedState = L), d.props = l2, d.state = L, d.context = h2, l2 = R) : (typeof d.componentDidMount == "function" && (r2.flags |= 4194308), l2 = false);
+          d.state = W2, Aa(r2, l2, d, c2), Li(), L = r2.memoizedState, y || W2 !== L || ma ? (typeof A == "function" && (Fu(r2, a2, A, l2), L = r2.memoizedState), (R2 = ma || ts(r2, a2, R2, l2, W2, L, h2)) ? (j2 || typeof d.UNSAFE_componentWillMount != "function" && typeof d.componentWillMount != "function" || (typeof d.componentWillMount == "function" && d.componentWillMount(), typeof d.UNSAFE_componentWillMount == "function" && d.UNSAFE_componentWillMount()), typeof d.componentDidMount == "function" && (r2.flags |= 4194308)) : (typeof d.componentDidMount == "function" && (r2.flags |= 4194308), r2.memoizedProps = l2, r2.memoizedState = L), d.props = l2, d.state = L, d.context = h2, l2 = R2) : (typeof d.componentDidMount == "function" && (r2.flags |= 4194308), l2 = false);
         } else {
-          d = r2.stateNode, Ha(t2, r2), h2 = r2.memoizedProps, j2 = Wr(a2, h2), d.props = j2, A = r2.pendingProps, W2 = d.context, L = a2.contextType, R = Ka, typeof L == "object" && L !== null && (R = In(L)), y = a2.getDerivedStateFromProps, (L = typeof y == "function" || typeof d.getSnapshotBeforeUpdate == "function") || typeof d.UNSAFE_componentWillReceiveProps != "function" && typeof d.componentWillReceiveProps != "function" || (h2 !== A || W2 !== R) && Jd(r2, d, l2, R), ma = false, W2 = r2.memoizedState, d.state = W2, Aa(r2, l2, d, c2), Li();
+          d = r2.stateNode, Ha(t2, r2), h2 = r2.memoizedProps, j2 = Wr(a2, h2), d.props = j2, A = r2.pendingProps, W2 = d.context, L = a2.contextType, R2 = Ka, typeof L == "object" && L !== null && (R2 = In(L)), y = a2.getDerivedStateFromProps, (L = typeof y == "function" || typeof d.getSnapshotBeforeUpdate == "function") || typeof d.UNSAFE_componentWillReceiveProps != "function" && typeof d.componentWillReceiveProps != "function" || (h2 !== A || W2 !== R2) && Jd(r2, d, l2, R2), ma = false, W2 = r2.memoizedState, d.state = W2, Aa(r2, l2, d, c2), Li();
           var V = r2.memoizedState;
-          h2 !== A || W2 !== V || ma || t2 !== null && t2.dependencies !== null && Ri(t2.dependencies) ? (typeof y == "function" && (Fu(r2, a2, y, l2), V = r2.memoizedState), (j2 = ma || ts(r2, a2, j2, l2, W2, V, R) || t2 !== null && t2.dependencies !== null && Ri(t2.dependencies)) ? (L || typeof d.UNSAFE_componentWillUpdate != "function" && typeof d.componentWillUpdate != "function" || (typeof d.componentWillUpdate == "function" && d.componentWillUpdate(l2, V, R), typeof d.UNSAFE_componentWillUpdate == "function" && d.UNSAFE_componentWillUpdate(l2, V, R)), typeof d.componentDidUpdate == "function" && (r2.flags |= 4), typeof d.getSnapshotBeforeUpdate == "function" && (r2.flags |= 1024)) : (typeof d.componentDidUpdate != "function" || h2 === t2.memoizedProps && W2 === t2.memoizedState || (r2.flags |= 4), typeof d.getSnapshotBeforeUpdate != "function" || h2 === t2.memoizedProps && W2 === t2.memoizedState || (r2.flags |= 1024), r2.memoizedProps = l2, r2.memoizedState = V), d.props = l2, d.state = V, d.context = R, l2 = j2) : (typeof d.componentDidUpdate != "function" || h2 === t2.memoizedProps && W2 === t2.memoizedState || (r2.flags |= 4), typeof d.getSnapshotBeforeUpdate != "function" || h2 === t2.memoizedProps && W2 === t2.memoizedState || (r2.flags |= 1024), l2 = false);
+          h2 !== A || W2 !== V || ma || t2 !== null && t2.dependencies !== null && Ri(t2.dependencies) ? (typeof y == "function" && (Fu(r2, a2, y, l2), V = r2.memoizedState), (j2 = ma || ts(r2, a2, j2, l2, W2, V, R2) || t2 !== null && t2.dependencies !== null && Ri(t2.dependencies)) ? (L || typeof d.UNSAFE_componentWillUpdate != "function" && typeof d.componentWillUpdate != "function" || (typeof d.componentWillUpdate == "function" && d.componentWillUpdate(l2, V, R2), typeof d.UNSAFE_componentWillUpdate == "function" && d.UNSAFE_componentWillUpdate(l2, V, R2)), typeof d.componentDidUpdate == "function" && (r2.flags |= 4), typeof d.getSnapshotBeforeUpdate == "function" && (r2.flags |= 1024)) : (typeof d.componentDidUpdate != "function" || h2 === t2.memoizedProps && W2 === t2.memoizedState || (r2.flags |= 4), typeof d.getSnapshotBeforeUpdate != "function" || h2 === t2.memoizedProps && W2 === t2.memoizedState || (r2.flags |= 1024), r2.memoizedProps = l2, r2.memoizedState = V), d.props = l2, d.state = V, d.context = R2, l2 = j2) : (typeof d.componentDidUpdate != "function" || h2 === t2.memoizedProps && W2 === t2.memoizedState || (r2.flags |= 4), typeof d.getSnapshotBeforeUpdate != "function" || h2 === t2.memoizedProps && W2 === t2.memoizedState || (r2.flags |= 1024), l2 = false);
         }
         return d = l2, ls(t2, r2), l2 = (r2.flags & 128) !== 0, d || l2 ? (d = r2.stateNode, a2 = l2 && typeof a2.getDerivedStateFromError != "function" ? null : d.render(), r2.flags |= 1, t2 !== null && l2 ? (r2.child = ri(r2, t2.child, null, c2), r2.child = ri(r2, null, a2, c2)) : wn(t2, r2, a2, c2), r2.memoizedState = d.state, t2 = r2.child) : t2 = gt(t2, r2, c2), t2;
       }
@@ -47729,8 +47729,8 @@ Error generating stack: ` + l2.message + `
             children: y
           }, c2), l2 = Eo(l2, c2, a2, null), y.return = r2, l2.return = r2, y.sibling = l2, r2.child = y, l2 = r2.child, l2.memoizedState = ss(a2), l2.childLanes = Ur(t2, h2, a2), r2.memoizedState = Qc, Mt(null, l2)) : (vo(r2), Uu(r2, y));
         }
-        var R = t2.memoizedState;
-        if (R !== null && (y = R.dehydrated, y !== null)) {
+        var R2 = t2.memoizedState;
+        if (R2 !== null && (y = R2.dehydrated, y !== null)) {
           if (d) r2.flags & 256 ? (vo(r2), r2.flags &= -257, r2 = et(t2, r2, a2)) : r2.memoizedState !== null ? (So(), r2.child = t2.child, r2.flags |= 128, r2 = null) : (So(), y = l2.fallback, c2 = r2.mode, l2 = mr({
             mode: "visible",
             children: l2.children
@@ -47741,17 +47741,17 @@ Error generating stack: ` + l2.message + `
             stack: null
           }), r2 = et(t2, r2, a2);
           else if (hn || po(t2, r2, a2, false), h2 = (a2 & t2.childLanes) !== 0, hn || h2) {
-            if (h2 = Ne, h2 !== null && (l2 = G(h2, a2), l2 !== 0 && l2 !== R.retryLane)) throw R.retryLane = l2, Ko(t2, l2), nt(h2, t2, l2), Mc;
+            if (h2 = Ne, h2 !== null && (l2 = G(h2, a2), l2 !== 0 && l2 !== R2.retryLane)) throw R2.retryLane = l2, Ko(t2, l2), nt(h2, t2, l2), Mc;
             Ns(y) || Gi(), r2 = et(t2, r2, a2);
-          } else Ns(y) ? (r2.flags |= 192, r2.child = t2.child, r2 = null) : (t2 = R.treeContext, Hn && (Ue = wh(y), bn = r2, ue = true, Do = null, Yt = false, t2 !== null && Ld(r2, t2)), r2 = Uu(r2, l2.children), r2.flags |= 4096);
+          } else Ns(y) ? (r2.flags |= 192, r2.child = t2.child, r2 = null) : (t2 = R2.treeContext, Hn && (Ue = wh(y), bn = r2, ue = true, Do = null, Yt = false, t2 !== null && Ld(r2, t2)), r2 = Uu(r2, l2.children), r2.flags |= 4096);
           return r2;
         }
-        return c2 ? (So(), y = l2.fallback, c2 = r2.mode, R = t2.child, d = R.sibling, l2 = Qr(R, {
+        return c2 ? (So(), y = l2.fallback, c2 = r2.mode, R2 = t2.child, d = R2.sibling, l2 = Qr(R2, {
           mode: "hidden",
           children: l2.children
-        }), l2.subtreeFlags = R.subtreeFlags & 65011712, d !== null ? y = Qr(d, y) : (y = Eo(y, c2, a2, null), y.flags |= 2), y.return = r2, l2.return = r2, l2.sibling = y, r2.child = l2, Mt(null, l2), l2 = r2.child, y = t2.child.memoizedState, y === null ? y = ss(a2) : (c2 = y.cachePool, c2 !== null ? (R = qt ? qe._currentValue : qe._currentValue2, c2 = c2.parent !== R ? {
-          parent: R,
-          pool: R
+        }), l2.subtreeFlags = R2.subtreeFlags & 65011712, d !== null ? y = Qr(d, y) : (y = Eo(y, c2, a2, null), y.flags |= 2), y.return = r2, l2.return = r2, l2.sibling = y, r2.child = l2, Mt(null, l2), l2 = r2.child, y = t2.child.memoizedState, y === null ? y = ss(a2) : (c2 = y.cachePool, c2 !== null ? (R2 = qt ? qe._currentValue : qe._currentValue2, c2 = c2.parent !== R2 ? {
+          parent: R2,
+          pool: R2
         } : c2) : c2 = Pu(), y = {
           baseLanes: y.baseLanes | a2,
           cachePool: c2
@@ -48345,11 +48345,11 @@ Error generating stack: ` + l2.message + `
                 var h2 = l2.inst, y = h2.destroy;
                 if (y !== void 0) {
                   h2.destroy = void 0, c2 = r2;
-                  var R = a2, L = y;
+                  var R2 = a2, L = y;
                   try {
                     L();
                   } catch (j2) {
-                    ve(c2, R, j2);
+                    ve(c2, R2, j2);
                   }
                 }
               }
@@ -48824,8 +48824,8 @@ Error generating stack: ` + l2.message + `
             break;
           case 22:
             c2 = t2.memoizedState !== null;
-            var h2 = a2 !== null && a2.memoizedState !== null, y = eo, R = sn;
-            if (eo = y || c2, sn = R || h2, tn(r2, t2), sn = R, eo = y, Mn(t2), l2 & 8192 && (r2 = t2.stateNode, r2._visibility = c2 ? r2._visibility & -2 : r2._visibility | 1, c2 && (a2 === null || h2 || eo || sn || Vt(t2)), $n)) {
+            var h2 = a2 !== null && a2.memoizedState !== null, y = eo, R2 = sn;
+            if (eo = y || c2, sn = R2 || h2, tn(r2, t2), sn = R2, eo = y, Mn(t2), l2 & 8192 && (r2 = t2.stateNode, r2._visibility = c2 ? r2._visibility & -2 : r2._visibility | 1, c2 && (a2 === null || h2 || eo || sn || Vt(t2)), $n)) {
               e: if (a2 = null, $n) for (r2 = t2; ; ) {
                 if (r2.tag === 5 || Gt && r2.tag === 26) {
                   if (a2 === null) {
@@ -48909,8 +48909,8 @@ Error generating stack: ` + l2.message + `
                   break;
                 case 3:
                 case 4:
-                  var R = a2.stateNode.containerInfo, L = Gu(t2);
-                  fs(t2, L, R);
+                  var R2 = a2.stateNode.containerInfo, L = Gu(t2);
+                  fs(t2, L, R2);
                   break;
                 default:
                   throw Error(F(161));
@@ -48983,8 +48983,8 @@ Error generating stack: ` + l2.message + `
               if (l2 = d, c2 = l2.updateQueue, c2 !== null) {
                 var y = l2.stateNode;
                 try {
-                  var R = c2.shared.hiddenCallbacks;
-                  if (R !== null) for (c2.shared.hiddenCallbacks = null, c2 = 0; c2 < R.length; c2++) Dd(R[c2], y);
+                  var R2 = c2.shared.hiddenCallbacks;
+                  if (R2 !== null) for (c2.shared.hiddenCallbacks = null, c2 = 0; c2 < R2.length; c2++) Dd(R2[c2], y);
                 } catch (L) {
                   ve(l2, l2.return, L);
                 }
@@ -49047,8 +49047,8 @@ Error generating stack: ` + l2.message + `
               try {
                 var d = r2.memoizedProps, h2 = d.id, y = d.onPostCommit;
                 typeof y == "function" && y(h2, r2.alternate === null ? "mount" : "update", t2.passiveEffectDuration, -0);
-              } catch (R) {
-                ve(r2, r2.return, R);
+              } catch (R2) {
+                ve(r2, r2.return, R2);
               }
             } else yt2(t2, r2, a2, l2);
             break;
@@ -49072,24 +49072,24 @@ Error generating stack: ` + l2.message + `
       }
       function ra(t2, r2, a2, l2, c2) {
         for (c2 = c2 && ((r2.subtreeFlags & 10256) !== 0 || false), r2 = r2.child; r2 !== null; ) {
-          var d = t2, h2 = r2, y = a2, R = l2, L = h2.flags;
+          var d = t2, h2 = r2, y = a2, R2 = l2, L = h2.flags;
           switch (h2.tag) {
             case 0:
             case 11:
             case 15:
-              ra(d, h2, y, R, c2), Br(8, h2);
+              ra(d, h2, y, R2, c2), Br(8, h2);
               break;
             case 23:
               break;
             case 22:
               var j2 = h2.stateNode;
-              h2.memoizedState !== null ? j2._visibility & 2 ? ra(d, h2, y, R, c2) : oa(d, h2) : (j2._visibility |= 2, ra(d, h2, y, R, c2)), c2 && L & 2048 && To(h2.alternate, h2);
+              h2.memoizedState !== null ? j2._visibility & 2 ? ra(d, h2, y, R2, c2) : oa(d, h2) : (j2._visibility |= 2, ra(d, h2, y, R2, c2)), c2 && L & 2048 && To(h2.alternate, h2);
               break;
             case 24:
-              ra(d, h2, y, R, c2), c2 && L & 2048 && Qn(h2.alternate, h2);
+              ra(d, h2, y, R2, c2), c2 && L & 2048 && Qn(h2.alternate, h2);
               break;
             default:
-              ra(d, h2, y, R, c2);
+              ra(d, h2, y, R2, c2);
           }
           r2 = r2.sibling;
         }
@@ -49353,9 +49353,9 @@ Error generating stack: ` + l2.message + `
                 e: {
                   var y = t2;
                   c2 = $s;
-                  var R = Hn && y.current.memoizedState.isDehydrated;
-                  if (R && (la(y, h2).flags |= 256), h2 = Ji(y, h2, false), h2 !== 2) {
-                    if (Gf && !R) {
+                  var R2 = Hn && y.current.memoizedState.isDehydrated;
+                  if (R2 && (la(y, h2).flags |= 256), h2 = Ji(y, h2, false), h2 !== 2) {
+                    if (Gf && !R2) {
                       y.errorRecoveryDisabledLanes |= d, ii |= d, c2 = 4;
                       break e;
                     }
@@ -49401,16 +49401,16 @@ Error generating stack: ` + l2.message + `
         } while (true);
         ir(t2);
       }
-      function tc(t2, r2, a2, l2, c2, d, h2, y, R, L, j2, A, W2, V) {
+      function tc(t2, r2, a2, l2, c2, d, h2, y, R2, L, j2, A, W2, V) {
         if (t2.timeoutHandle = Lo, A = r2.subtreeFlags, A & 8192 || (A & 16785408) === 16785408) {
           A = oh(), lf(r2, d, A);
           var Oe = (d & 62914560) === d ? Vs - ze() : (d & 4194048) === d ? Zf - ze() : 0;
           if (Oe = ah(A, Oe), Oe !== null) {
-            no = d, t2.cancelPendingCommit = Oe(pf.bind(null, t2, r2, d, a2, l2, c2, h2, y, R, j2, A, null, W2, V)), Ro(t2, d, h2, !L);
+            no = d, t2.cancelPendingCommit = Oe(pf.bind(null, t2, r2, d, a2, l2, c2, h2, y, R2, j2, A, null, W2, V)), Ro(t2, d, h2, !L);
             return;
           }
         }
-        pf(t2, r2, d, a2, l2, c2, h2, y, R);
+        pf(t2, r2, d, a2, l2, c2, h2, y, R2);
       }
       function Qp(t2) {
         for (var r2 = t2; ; ) {
@@ -49492,7 +49492,7 @@ Error generating stack: ` + l2.message + `
         e: do
           try {
             if (_e !== 0 && de !== null) {
-              var y = de, R = Ht;
+              var y = de, R2 = Ht;
               switch (_e) {
                 case 8:
                   bs(), h2 = 6;
@@ -49503,13 +49503,13 @@ Error generating stack: ` + l2.message + `
                 case 6:
                   Ft.current === null && (r2 = true);
                   var L = _e;
-                  if (_e = 0, Ht = null, Qa(t2, y, R, L), a2 && ai) {
+                  if (_e = 0, Ht = null, Qa(t2, y, R2, L), a2 && ai) {
                     h2 = 0;
                     break e;
                   }
                   break;
                 default:
-                  L = _e, _e = 0, Ht = null, Qa(t2, y, R, L);
+                  L = _e, _e = 0, Ht = null, Qa(t2, y, R2, L);
               }
             }
             qp(), h2 = Xe;
@@ -49563,8 +49563,8 @@ Error generating stack: ` + l2.message + `
                       h2 = de.memoizedState;
                     case 5:
                     case 27:
-                      var y = de, R = y.type, L = y.pendingProps;
-                      if (h2 ? Tc(h2) : An(y.stateNode, R, L)) {
+                      var y = de, R2 = y.type, L = y.pendingProps;
+                      if (h2 ? Tc(h2) : An(y.stateNode, R2, L)) {
                         _e = 0, Ht = null;
                         var j2 = y.sibling;
                         if (j2 !== null) de = j2;
@@ -49670,7 +49670,7 @@ Error generating stack: ` + l2.message + `
         } while (t2 !== null);
         Xe = 6, de = null;
       }
-      function pf(t2, r2, a2, l2, c2, d, h2, y, R) {
+      function pf(t2, r2, a2, l2, c2, d, h2, y, R2) {
         t2.cancelPendingCommit = null;
         do
           rn();
@@ -49678,7 +49678,7 @@ Error generating stack: ` + l2.message + `
         if ((ce & 6) !== 0) throw Error(F(327));
         if (r2 !== null) {
           if (r2 === t2.current) throw Error(F(177));
-          if (d = r2.lanes | r2.childLanes, d |= $f, _p(t2, a2, d, h2, y, R), t2 === Ne && (de = Ne = null, he = 0), Sa = r2, Bo = t2, no = a2, Kc = d, ed = c2, $h = l2, (r2.subtreeFlags & 10256) !== 0 || (r2.flags & 10256) !== 0 ? (t2.callbackNode = null, t2.callbackPriority = 0, Nm(Ao, function() {
+          if (d = r2.lanes | r2.childLanes, d |= $f, _p(t2, a2, d, h2, y, R2), t2 === Ne && (de = Ne = null, he = 0), Sa = r2, Bo = t2, no = a2, Kc = d, ed = c2, $h = l2, (r2.subtreeFlags & 10256) !== 0 || (r2.flags & 10256) !== 0 ? (t2.callbackNode = null, t2.callbackPriority = 0, Nm(Ao, function() {
             return hf(), null;
           })) : (t2.callbackNode = null, t2.callbackPriority = 0), l2 = (r2.flags & 13878) !== 0, (r2.subtreeFlags & 13878) !== 0 || l2) {
             l2 = M.T, M.T = null, c2 = qr(), yn(2), h2 = ce, ce |= 4;
@@ -49921,11 +49921,11 @@ Error generating stack: ` + l2.message + `
           implementation: t2.implementation
         }, r2;
       }
-      function bf(t2, r2, a2, l2, c2, d, h2, y, R) {
-        this.tag = 1, this.containerInfo = t2, this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = Lo, this.callbackNode = this.next = this.pendingContext = this.context = this.cancelPendingCommit = null, this.callbackPriority = 0, this.expirationTimes = mu(-1), this.entangledLanes = this.shellSuspendCounter = this.errorRecoveryDisabledLanes = this.expiredLanes = this.warmLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = mu(0), this.hiddenUpdates = mu(null), this.identifierPrefix = l2, this.onUncaughtError = c2, this.onCaughtError = d, this.onRecoverableError = h2, this.pooledCache = null, this.pooledCacheLanes = 0, this.formState = R, this.incompleteTransitions = /* @__PURE__ */ new Map();
+      function bf(t2, r2, a2, l2, c2, d, h2, y, R2) {
+        this.tag = 1, this.containerInfo = t2, this.pingCache = this.current = this.pendingChildren = null, this.timeoutHandle = Lo, this.callbackNode = this.next = this.pendingContext = this.context = this.cancelPendingCommit = null, this.callbackPriority = 0, this.expirationTimes = mu(-1), this.entangledLanes = this.shellSuspendCounter = this.errorRecoveryDisabledLanes = this.expiredLanes = this.warmLanes = this.pingedLanes = this.suspendedLanes = this.pendingLanes = 0, this.entanglements = mu(0), this.hiddenUpdates = mu(null), this.identifierPrefix = l2, this.onUncaughtError = c2, this.onCaughtError = d, this.onRecoverableError = h2, this.pooledCache = null, this.pooledCacheLanes = 0, this.formState = R2, this.incompleteTransitions = /* @__PURE__ */ new Map();
       }
-      function xs(t2, r2, a2, l2, c2, d, h2, y, R, L, j2, A) {
-        return t2 = new bf(t2, r2, a2, h2, R, L, j2, A, y), r2 = 1, d === true && (r2 |= 24), d = Yn(3, null, null, r2), t2.current = d, d.stateNode = t2, r2 = Fd(), r2.refCount++, t2.pooledCache = r2, r2.refCount++, d.memoizedState = {
+      function xs(t2, r2, a2, l2, c2, d, h2, y, R2, L, j2, A) {
+        return t2 = new bf(t2, r2, a2, h2, R2, L, j2, A, y), r2 = 1, d === true && (r2 |= 24), d = Yn(3, null, null, r2), t2.current = d, d.stateNode = t2, r2 = Fd(), r2.refCount++, t2.pooledCache = r2, r2.refCount++, d.memoizedState = {
           element: l2,
           isDehydrated: a2,
           cache: r2
@@ -50324,16 +50324,16 @@ Error generating stack: ` + l2.message + `
           $$typeof: Vc,
           value: t2
         };
-      }, ie2.createContainer = function(t2, r2, a2, l2, c2, d, h2, y, R, L) {
-        return xs(t2, r2, false, null, a2, l2, d, null, h2, y, R, L);
+      }, ie2.createContainer = function(t2, r2, a2, l2, c2, d, h2, y, R2, L) {
+        return xs(t2, r2, false, null, a2, l2, d, null, h2, y, R2, L);
       }, ie2.createHasPseudoClassSelector = function(t2) {
         return {
           $$typeof: qc,
           value: t2
         };
-      }, ie2.createHydrationContainer = function(t2, r2, a2, l2, c2, d, h2, y, R, L, j2, A, W2, V) {
+      }, ie2.createHydrationContainer = function(t2, r2, a2, l2, c2, d, h2, y, R2, L, j2, A, W2, V) {
         var _r2;
-        return t2 = xs(a2, l2, true, t2, c2, d, y, V, R, L, j2, A), t2.context = fc(null), a2 = t2.current, l2 = bt(), l2 = st(l2), c2 = Et(l2), c2.callback = (_r2 = r2) != null ? _r2 : null, Nr(a2, c2, l2), r2 = l2, t2.current.lanes = r2, xi(t2, r2), ir(t2), t2;
+        return t2 = xs(a2, l2, true, t2, c2, d, y, V, R2, L, j2, A), t2.context = fc(null), a2 = t2.current, l2 = bt(), l2 = st(l2), c2 = Et(l2), c2.callback = (_r2 = r2) != null ? _r2 : null, Nr(a2, c2, l2), r2 = l2, t2.current.lanes = r2, xi(t2, r2), ir(t2), t2;
       }, ie2.createPortal = function(t2, r2, a2) {
         var l2 = 3 < arguments.length && arguments[3] !== void 0 ? arguments[3] : null;
         return {
@@ -50385,17 +50385,17 @@ Error generating stack: ` + l2.message + `
         for (r2 = t2.length - 1; 0 < r2; r2--) {
           a2 = t2[r2];
           for (var l2 = a2.x, c2 = l2 + a2.width, d = a2.y, h2 = d + a2.height, y = r2 - 1; 0 <= y; y--) if (r2 !== y) {
-            var R = t2[y], L = R.x, j2 = L + R.width, A = R.y, W2 = A + R.height;
+            var R2 = t2[y], L = R2.x, j2 = L + R2.width, A = R2.y, W2 = A + R2.height;
             if (l2 >= L && d >= A && c2 <= j2 && h2 <= W2) {
               t2.splice(r2, 1);
               break;
-            } else if (l2 !== L || a2.width !== R.width || W2 < d || A > h2) {
-              if (!(d !== A || a2.height !== R.height || j2 < l2 || L > c2)) {
-                L > l2 && (R.width += L - l2, R.x = l2), j2 < c2 && (R.width = c2 - L), t2.splice(r2, 1);
+            } else if (l2 !== L || a2.width !== R2.width || W2 < d || A > h2) {
+              if (!(d !== A || a2.height !== R2.height || j2 < l2 || L > c2)) {
+                L > l2 && (R2.width += L - l2, R2.x = l2), j2 < c2 && (R2.width = c2 - L), t2.splice(r2, 1);
                 break;
               }
             } else {
-              A > d && (R.height += A - d, R.y = d), W2 < h2 && (R.height = h2 - A), t2.splice(r2, 1);
+              A > d && (R2.height += A - d, R2.y = d), W2 < h2 && (R2.height = h2 - A), t2.splice(r2, 1);
               break;
             }
           }
@@ -50429,8 +50429,8 @@ Error generating stack: ` + l2.message + `
         var a2 = 0, l2 = [];
         t2 = [Vi(t2), 0];
         for (var c2 = 0; c2 < t2.length; ) {
-          var d = t2[c2++], h2 = d.tag, y = t2[c2++], R = r2[y];
-          if ((h2 !== 5 && h2 !== 26 && h2 !== 27 || !Jr(d)) && (ms(d, R) && (l2.push(nc(R)), y++, y > a2 && (a2 = y)), y < r2.length)) for (d = d.child; d !== null; ) t2.push(d, y), d = d.sibling;
+          var d = t2[c2++], h2 = d.tag, y = t2[c2++], R2 = r2[y];
+          if ((h2 !== 5 && h2 !== 26 && h2 !== 27 || !Jr(d)) && (ms(d, R2) && (l2.push(nc(R2)), y++, y > a2 && (a2 = y)), y < r2.length)) for (d = d.child; d !== null; ) t2.push(d, y), d = d.sibling;
         }
         if (a2 < r2.length) {
           for (t2 = []; a2 < r2.length; a2++) t2.push(nc(r2[a2]));
@@ -51431,7 +51431,7 @@ function j({ debounce: n, scroll: t2, polyfill: o2, offsetSize: i2 } = { debounc
   const [z, m2, s] = reactExports.useMemo(() => {
     const r2 = () => {
       if (!e2.current.element) return;
-      const { left: y, top: C, width: H, height: O, bottom: S, right: x2, x: B, y: R } = e2.current.element.getBoundingClientRect(), l2 = { left: y, top: C, width: H, height: O, bottom: S, right: x2, x: B, y: R };
+      const { left: y, top: C, width: H, height: O, bottom: S, right: x2, x: B, y: R2 } = e2.current.element.getBoundingClientRect(), l2 = { left: y, top: C, width: H, height: O, bottom: S, right: x2, x: B, y: R2 };
       e2.current.element instanceof HTMLElement && i2 && (l2.height = e2.current.element.offsetHeight, l2.width = e2.current.element.offsetWidth), Object.freeze(l2), w.current && !D$1(e2.current.lastBounds, l2) && h2(e2.current.lastBounds = l2);
     };
     return [r2, f ? g(r2, f) : r2, d ? g(r2, d) : r2];
@@ -56558,20 +56558,20 @@ const D = /* @__PURE__ */ reactExports.createContext(null), ie = (e2) => (e2.get
   const { gl: d, scene: m2, camera: v, size: x2 } = useThree(), f = o2 || m2, u = t2 || v, [c2, U, b2] = reactExports.useMemo(() => {
     const C = new EffectComposer(d, { depthBuffer: s, stencilBuffer: p2, multisampling: _, frameBufferType: S });
     C.addPass(new RenderPass(f, u));
-    let R = null, E2 = null;
-    return l2 && (E2 = new NormalPass(f, u), E2.enabled = false, C.addPass(E2), r2 !== void 0 && (R = new DepthDownsamplingPass({ normalBuffer: E2.texture, resolutionScale: r2 }), R.enabled = false, C.addPass(R))), [C, E2, R];
+    let R2 = null, E2 = null;
+    return l2 && (E2 = new NormalPass(f, u), E2.enabled = false, C.addPass(E2), r2 !== void 0 && (R2 = new DepthDownsamplingPass({ normalBuffer: E2.texture, resolutionScale: r2 }), R2.enabled = false, C.addPass(R2))), [C, E2, R2];
   }, [u, d, s, p2, _, S, f, l2, r2]);
-  reactExports.useEffect(() => c2?.setSize(x2.width, x2.height), [c2, x2]), useFrame((C, R) => {
+  reactExports.useEffect(() => c2?.setSize(x2.width, x2.height), [c2, x2]), useFrame((C, R2) => {
     if (a2) {
       const E2 = d.autoClear;
-      d.autoClear = i2, p2 && !i2 && d.clearStencil(), c2.render(R), d.autoClear = E2;
+      d.autoClear = i2, p2 && !i2 && d.clearStencil(), c2.render(R2), d.autoClear = E2;
     }
   }, a2 ? n : 0);
   const F = reactExports.useRef(null);
   reactExports.useLayoutEffect(() => {
-    const C = [], R = F.current.__r3f;
-    if (R && c2) {
-      const E2 = R.children;
+    const C = [], R2 = F.current.__r3f;
+    if (R2 && c2) {
+      const E2 = R2.children;
       for (let T = 0; T < E2.length; T++) {
         const N = E2[T].object;
         if (N instanceof Effect) {
@@ -56612,24 +56612,24 @@ const le = /* @__PURE__ */ new WeakMap(), P = (e2, t2) => function({ blendFuncti
 };
 const wt = /* @__PURE__ */ P(BloomEffect, { blendFunction: 0 }), yt = /* @__PURE__ */ P(ChromaticAberrationEffect), At = /* @__PURE__ */ P(NoiseEffect, { blendFunction: 5 });
 const CYLINDER_RADIUS = 12;
+const RING_Y_POSITIONS = [-1.2, 1.5];
 const RING_0_COUNT = 13;
 const RING_1_COUNT = 12;
-const RING_Y_POSITIONS = [-1.2, 1.5];
+const ROTUNDA_RADIUS = 15;
+const ROTUNDA_HEIGHT = 8;
+const ROTUNDA_CAMERA_POS = [0, 1.5, 0];
+const ROTUNDA_CAMERA_LOOK = [0, 1.5, 15];
+const ARCHWAY_WIDTH = 5;
+const ARCHWAY_HEIGHT = 7;
+const CORRIDOR_LENGTH = 40;
+const CORRIDOR_WIDTH = 4;
 const CAMERA_FOV = 65;
 const CAMERA_NEAR = 0.1;
 const CAMERA_FAR = 100;
-const ENTRANCE_ANGLE = Math.PI;
-const ENTRANCE_Y = 0.15;
-const ENTRANCE_POSITION = [
-  Math.sin(ENTRANCE_ANGLE) * CYLINDER_RADIUS,
-  // ≈ 0
-  ENTRANCE_Y,
-  Math.cos(ENTRANCE_ANGLE) * CYLINDER_RADIUS
-  // -12
-];
-const ENTRANCE_CAMERA_POS = [0, 0.5, 0.01];
-const ENTRANCE_CAMERA_LOOK = [0, 0.15, -4];
-const ALCOVE_VIEW_DISTANCE = 2;
+const WING_VIEW_DISTANCE = 8;
+const DEFAULT_FLIGHT_DURATION = 5;
+const MIN_FLIGHT_DURATION = 3;
+const MAX_FLIGHT_DURATION = 20;
 function getAlcoveTransform(ring, index) {
   const count = ring === 0 ? RING_0_COUNT : RING_1_COUNT;
   const angularOffset = ring === 1 ? Math.PI / RING_0_COUNT : 0;
@@ -56641,18 +56641,6 @@ function getAlcoveTransform(ring, index) {
   return {
     position: [x2, y, z],
     rotation: [0, rotY, 0]
-  };
-}
-function getAlcoveCameraTarget(ring, index) {
-  const { position } = getAlcoveTransform(ring, index);
-  const [ax, ay, az] = position;
-  const dist = Math.sqrt(ax * ax + az * az);
-  const dirX = ax / dist;
-  const dirZ = az / dist;
-  const camDist = ALCOVE_VIEW_DISTANCE;
-  return {
-    position: [dirX * camDist, ay, dirZ * camDist],
-    lookAt: [ax, ay, az]
   };
 }
 const PALETTE = {
@@ -56729,7 +56717,7 @@ function ParticleField() {
     )
   ] });
 }
-const vertexShader = (
+const vertexShader$2 = (
   /* glsl */
   `
   varying vec2 vUv;
@@ -56739,7 +56727,7 @@ const vertexShader = (
   }
 `
 );
-const fragmentShader = (
+const fragmentShader$2 = (
   /* glsl */
   `
   uniform float uTime;
@@ -56760,8 +56748,8 @@ const fragmentShader = (
 function ScanlineOverlay() {
   const material = reactExports.useMemo(
     () => new ShaderMaterial({
-      vertexShader,
-      fragmentShader,
+      vertexShader: vertexShader$2,
+      fragmentShader: fragmentShader$2,
       uniforms: {
         uTime: { value: 0 }
       },
@@ -56839,7 +56827,7 @@ function SpatialScene({ children }) {
     Canvas,
     {
       camera: {
-        position: ENTRANCE_CAMERA_POS,
+        position: ROTUNDA_CAMERA_POS,
         fov: CAMERA_FOV,
         near: CAMERA_NEAR,
         far: CAMERA_FAR
@@ -56879,44 +56867,177 @@ const createImpl = (createState) => {
   return useBoundStore;
 };
 const create = ((createState) => createState ? createImpl(createState) : createImpl);
-const useHallStore = create((set) => ({
-  depth: "hall",
+const R = 15;
+const WINGS = {
+  reduction: {
+    id: "reduction",
+    name: "Hall of Reduction",
+    tagline: "Remove until the structure speaks for itself",
+    color: "#00e5ff",
+    archPosition: [0, 0, R],
+    archRotation: [0, Math.PI, 0],
+    polymathIds: ["feynman", "carmack", "shannon", "rams", "musk", "linus"]
+  },
+  vision: {
+    id: "vision",
+    name: "Hall of Structural Vision",
+    tagline: "Build the complete model before you touch the world",
+    color: "#FFD700",
+    archPosition: [R, 0, 0],
+    archRotation: [0, -Math.PI / 2, 0],
+    polymathIds: ["tesla", "davinci", "lovelace", "tao", "munger", "gates"]
+  },
+  inversion: {
+    id: "inversion",
+    name: "Hall of Inversion",
+    tagline: "Find freedom by first accepting what cannot be changed",
+    color: "#E0E8FF",
+    archPosition: [0, 0, -R],
+    archRotation: [0, 0, 0],
+    polymathIds: ["bezos", "suntzu", "thiel", "disney", "andreessen", "aurelius"]
+  },
+  resonance: {
+    id: "resonance",
+    name: "Hall of Resonance",
+    tagline: "Signal is not real until it has landed in a receiver",
+    color: "#FFAA44",
+    archPosition: [-R, 0, 0],
+    archRotation: [0, Math.PI / 2, 0],
+    polymathIds: ["jobs", "vangogh", "ogilvy", "godin", "mrbeast", "graham", "socrates"]
+  }
+};
+const WING_LIST = ["reduction", "vision", "inversion", "resonance"];
+function getWingForPolymath(polymathId) {
+  for (const wing of WING_LIST) {
+    if (WINGS[wing].polymathIds.includes(polymathId)) return wing;
+  }
+  return null;
+}
+const useHallStore = create((set, get) => ({
+  depth: "rotunda",
+  activeWing: null,
   activePolymathId: null,
-  previousDepth: null,
-  cameraTarget: ENTRANCE_CAMERA_POS,
-  cameraLookAt: ENTRANCE_CAMERA_LOOK,
+  corridorProgress: 0,
+  corridorFlightDuration: DEFAULT_FLIGHT_DURATION,
+  cameraTarget: ROTUNDA_CAMERA_POS,
+  cameraLookAt: ROTUNDA_CAMERA_LOOK,
   polymaths: [],
-  activeSessionId: null,
   conversations: [],
+  activeSessionId: null,
   setPolymaths: (polymaths) => set({ polymaths }),
-  navigateToAlcove: (polymathId, cameraPos, lookAt) => set((state2) => ({
-    depth: "alcove",
+  navigateToWing: (wingId) => {
+    const wing = WINGS[wingId];
+    const dir = [wing.archPosition[0], 0, wing.archPosition[2]];
+    const len = Math.sqrt(dir[0] ** 2 + dir[2] ** 2);
+    const camDist = WING_VIEW_DISTANCE;
+    set({
+      depth: "wing",
+      activeWing: wingId,
+      activePolymathId: null,
+      cameraTarget: [dir[0] / len * camDist, 1.5, dir[2] / len * camDist],
+      cameraLookAt: [...wing.archPosition]
+    });
+  },
+  navigateToPolymath: (polymathId) => set({
+    depth: "corridor",
     activePolymathId: polymathId,
-    previousDepth: state2.depth,
-    cameraTarget: cameraPos,
-    cameraLookAt: lookAt
-  })),
-  navigateToHall: () => set((state2) => ({
-    depth: "hall",
+    corridorProgress: 0
+  }),
+  navigateToRotunda: () => set({
+    depth: "rotunda",
+    activeWing: null,
     activePolymathId: null,
-    previousDepth: state2.depth,
-    cameraTarget: ENTRANCE_CAMERA_POS,
-    cameraLookAt: ENTRANCE_CAMERA_LOOK,
-    activeSessionId: null
-  })),
-  enterConversation: (sessionId) => set((state2) => ({
-    depth: "conversation",
-    previousDepth: state2.depth,
-    activeSessionId: sessionId
-  })),
-  exitConversation: () => set((state2) => ({
-    depth: "alcove",
-    previousDepth: state2.depth,
-    activeSessionId: null
-  })),
+    activeSessionId: null,
+    cameraTarget: ROTUNDA_CAMERA_POS,
+    cameraLookAt: ROTUNDA_CAMERA_LOOK
+  }),
+  exitCorridor: () => {
+    const { activeWing } = get();
+    if (activeWing) {
+      get().navigateToWing(activeWing);
+    } else {
+      get().navigateToRotunda();
+    }
+    set({ activePolymathId: null, corridorProgress: 0 });
+  },
+  arriveAtAlcove: () => set({ depth: "alcove" }),
+  enterConversation: (sessionId) => set({ activeSessionId: sessionId }),
+  exitConversation: () => {
+    const { activeWing } = get();
+    set({ activeSessionId: null, activePolymathId: null, corridorProgress: 0 });
+    if (activeWing) {
+      get().navigateToWing(activeWing);
+    } else {
+      get().navigateToRotunda();
+    }
+  },
+  setCorridorProgress: (t2) => set({ corridorProgress: t2 }),
   setConversations: (conversations) => set({ conversations }),
-  setActiveSessionId: (sessionId) => set({ activeSessionId: sessionId })
+  setActiveSessionId: (sessionId) => set({ activeSessionId: sessionId }),
+  setCorridorFlightDuration: (seconds) => set({ corridorFlightDuration: seconds })
 }));
+const vertexShader$1 = `
+  varying vec2 vUv;
+  varying vec3 vWorldPos;
+  void main() {
+    vUv = uv;
+    vec4 wp = modelMatrix * vec4(position, 1.0);
+    vWorldPos = wp.xyz;
+    gl_Position = projectionMatrix * viewMatrix * wp;
+  }
+`;
+const fragmentShader$1 = `
+  uniform float uTime;
+  uniform vec3 uColor;
+  varying vec2 vUv;
+  varying vec3 vWorldPos;
+  void main() {
+    float gridSize = 2.0;
+    vec2 grid = abs(fract(vWorldPos.xz / gridSize - 0.5) - 0.5) / fwidth(vWorldPos.xz / gridSize);
+    float line = min(grid.x, grid.y);
+    float gridAlpha = 1.0 - min(line, 1.0);
+    float dist = length(vWorldPos.xz) / ${ROTUNDA_RADIUS.toFixed(1)};
+    float edgeFade = smoothstep(1.0, 0.7, dist);
+    float pulse = 0.7 + 0.3 * sin(uTime * 0.5);
+    float alpha = gridAlpha * edgeFade * pulse * 0.25;
+    gl_FragColor = vec4(uColor, alpha);
+  }
+`;
+function RotundaFloor() {
+  const matRef = reactExports.useRef(null);
+  const uniforms = reactExports.useMemo(
+    () => ({
+      uTime: { value: 0 },
+      uColor: { value: [0, 0.9, 1] }
+    }),
+    []
+  );
+  useFrame((state2) => {
+    if (matRef.current) matRef.current.uniforms.uTime.value = state2.clock.elapsedTime;
+    state2.invalidate();
+  });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("mesh", { rotation: [-Math.PI / 2, 0, 0], position: [0, 0, 0], children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("circleGeometry", { args: [ROTUNDA_RADIUS, 64] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "shaderMaterial",
+      {
+        ref: matRef,
+        vertexShader: vertexShader$1,
+        fragmentShader: fragmentShader$1,
+        uniforms,
+        transparent: true,
+        depthWrite: false
+      }
+    )
+  ] });
+}
+function RotundaDome() {
+  const edges = reactExports.useMemo(() => {
+    const geo = new SphereGeometry(ROTUNDA_RADIUS, 24, 12, 0, Math.PI * 2, 0, Math.PI / 2);
+    return new EdgesGeometry(geo, 15);
+  }, []);
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("lineSegments", { geometry: edges, position: [0, ROTUNDA_HEIGHT, 0], children: /* @__PURE__ */ jsxRuntimeExports.jsx("lineBasicMaterial", { color: "#00e5ff", transparent: true, opacity: 0.08 }) });
+}
 function _extends() {
   return _extends = Object.assign ? Object.assign.bind() : function(n) {
     for (var e2 = 1; e2 < arguments.length; e2++) {
@@ -64404,8 +64525,8 @@ function typrFactory() {
           if ("o1234" == P2 || "o1235" == P2 || "o1236" == P2 || "o1237" == P2) "o1234" == P2 && (p2 = v, U = (c2 = l2 + s.shift()) + s.shift(), C = g2 = p2 + s.shift(), m2 = g2, y = v, l2 = (b2 = (S = (F = U + s.shift()) + s.shift()) + s.shift()) + s.shift(), e2.U.P.curveTo(o2, c2, p2, U, g2, F, C), e2.U.P.curveTo(o2, S, m2, b2, y, l2, v)), "o1235" == P2 && (c2 = l2 + s.shift(), p2 = v + s.shift(), U = c2 + s.shift(), g2 = p2 + s.shift(), F = U + s.shift(), C = g2 + s.shift(), S = F + s.shift(), m2 = C + s.shift(), b2 = S + s.shift(), y = m2 + s.shift(), l2 = b2 + s.shift(), v = y + s.shift(), s.shift(), e2.U.P.curveTo(o2, c2, p2, U, g2, F, C), e2.U.P.curveTo(o2, S, m2, b2, y, l2, v)), "o1236" == P2 && (c2 = l2 + s.shift(), p2 = v + s.shift(), U = c2 + s.shift(), C = g2 = p2 + s.shift(), m2 = g2, b2 = (S = (F = U + s.shift()) + s.shift()) + s.shift(), y = m2 + s.shift(), l2 = b2 + s.shift(), e2.U.P.curveTo(o2, c2, p2, U, g2, F, C), e2.U.P.curveTo(o2, S, m2, b2, y, l2, v)), "o1237" == P2 && (c2 = l2 + s.shift(), p2 = v + s.shift(), U = c2 + s.shift(), g2 = p2 + s.shift(), F = U + s.shift(), C = g2 + s.shift(), S = F + s.shift(), m2 = C + s.shift(), b2 = S + s.shift(), y = m2 + s.shift(), Math.abs(b2 - l2) > Math.abs(y - v) ? l2 = b2 + s.shift() : v = y + s.shift(), e2.U.P.curveTo(o2, c2, p2, U, g2, F, C), e2.U.P.curveTo(o2, S, m2, b2, y, l2, v));
           else if ("o14" == P2) {
             if (s.length > 0 && !h2 && (d = s.shift() + a3.nominalWidthX, h2 = true), 4 == s.length) {
-              var O = s.shift(), T = s.shift(), D2 = s.shift(), B = s.shift(), A = e2.CFF.glyphBySE(a3, D2), R = e2.CFF.glyphBySE(a3, B);
-              e2.U._drawCFF(a3.CharStrings[A], t3, a3, n, o2), t3.x = O, t3.y = T, e2.U._drawCFF(a3.CharStrings[R], t3, a3, n, o2);
+              var O = s.shift(), T = s.shift(), D2 = s.shift(), B = s.shift(), A = e2.CFF.glyphBySE(a3, D2), R2 = e2.CFF.glyphBySE(a3, B);
+              e2.U._drawCFF(a3.CharStrings[A], t3, a3, n, o2), t3.x = O, t3.y = T, e2.U._drawCFF(a3.CharStrings[R2], t3, a3, n, o2);
             }
             f && (e2.U.P.closePath(o2), f = false);
           } else if ("o19" == P2 || "o20" == P2) {
@@ -64529,8 +64650,8 @@ function woff2otfFactory() {
                 for (16 == I ? (N = 3 + L(r3, k3, 3), k3 += 2, K = F[q - 1]) : 17 == I ? (N = 3 + L(r3, k3, 7), k3 += 3) : 18 == I && (N = 11 + L(r3, k3, 127), k3 += 7); N--; ) F[q++] = K;
               }
             }
-            var Q = F.subarray(0, j2), R = F.subarray(j2);
-            E2 = y(Q), D2 = y(R), A2 = w(Q, E2), x3 = w(R, D2);
+            var Q = F.subarray(0, j2), R2 = F.subarray(j2);
+            E2 = y(Q), D2 = y(R2), A2 = w(Q, E2), x3 = w(R2, D2);
           } else T(1);
           if (k3 > M) {
             g3 && T(0);
@@ -64557,17 +64678,17 @@ function woff2otfFactory() {
             }
             var er = x3[U(r3, k3) & X2], nr = er >>> 4;
             er || T(3), k3 += 15 & er;
-            R = l2[nr];
+            R2 = l2[nr];
             if (nr > 3) {
               rr = i2[nr];
-              R += U(r3, k3) & (1 << rr) - 1, k3 += rr;
+              R2 += U(r3, k3) & (1 << rr) - 1, k3 += rr;
             }
             if (k3 > M) {
               g3 && T(0);
               break;
             }
             c3 && d2(O2 + 131072);
-            for (var tr = O2 + $; O2 < tr; O2 += 4) f2[O2] = f2[O2 - R], f2[O2 + 1] = f2[O2 + 1 - R], f2[O2 + 2] = f2[O2 + 2 - R], f2[O2 + 3] = f2[O2 + 3 - R];
+            for (var tr = O2 + $; O2 < tr; O2 += 4) f2[O2] = f2[O2 - R2], f2[O2 + 1] = f2[O2 + 1 - R2], f2[O2 + 2] = f2[O2 + 2 - R2], f2[O2 + 3] = f2[O2 + 3 - R2];
             O2 = tr;
           }
         }
@@ -67701,6 +67822,286 @@ function PolymathPortrait({
     /* @__PURE__ */ jsxRuntimeExports.jsx("lineSegments", { geometry: edgesGeo, children: /* @__PURE__ */ jsxRuntimeExports.jsx("lineBasicMaterial", { color: color2, transparent: true, opacity: 0.4 }) })
   ] });
 }
+const PORTRAIT_SIZE = 0.8;
+const PORTRAIT_GAP = 1.1;
+function WingGallery({ wing }) {
+  const polymaths = useHallStore((s) => s.polymaths);
+  const navigateToPolymath = useHallStore((s) => s.navigateToPolymath);
+  const wingPolymaths = polymaths.filter((p2) => wing.polymathIds.includes(p2.id));
+  const count = wingPolymaths.length;
+  const totalWidth = (count - 1) * PORTRAIT_GAP;
+  return /* @__PURE__ */ jsxRuntimeExports.jsx("group", { position: [0, 3, 0.3], children: wingPolymaths.map((polymath, i2) => {
+    const x2 = -totalWidth / 2 + i2 * PORTRAIT_GAP;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      "group",
+      {
+        position: [x2, 0, 0],
+        onClick: (e2) => {
+          e2.stopPropagation();
+          navigateToPolymath(polymath.id);
+        },
+        onPointerOver: (e2) => {
+          e2.stopPropagation();
+          document.body.style.cursor = "pointer";
+        },
+        onPointerOut: () => {
+          document.body.style.cursor = "default";
+        },
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            PolymathPortrait,
+            {
+              polymathId: polymath.id,
+              color: polymath.color,
+              width: PORTRAIT_SIZE,
+              height: PORTRAIT_SIZE
+            }
+          ),
+          /* @__PURE__ */ jsxRuntimeExports.jsx(
+            HoloText,
+            {
+              position: [0, -PORTRAIT_SIZE / 2 - 0.2, 0],
+              fontSize: 0.08,
+              color: "#e0f0ff",
+              glowColor: wing.color,
+              children: polymath.name
+            }
+          )
+        ]
+      },
+      polymath.id
+    );
+  }) });
+}
+function Archway({ wing }) {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("group", { position: wing.archPosition, rotation: wing.archRotation, children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HoloGlassPanel,
+      {
+        width: ARCHWAY_WIDTH,
+        height: ARCHWAY_HEIGHT,
+        position: [0, ARCHWAY_HEIGHT / 2, 0],
+        edgeColor: wing.color
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HoloText,
+      {
+        position: [0, ARCHWAY_HEIGHT + 0.5, 0],
+        fontSize: 0.35,
+        color: wing.color,
+        glowColor: wing.color,
+        children: wing.name.toUpperCase()
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HoloText,
+      {
+        position: [0, ARCHWAY_HEIGHT - 0.2, 0],
+        fontSize: 0.12,
+        color: "#8899aa",
+        glowColor: wing.color,
+        maxWidth: ARCHWAY_WIDTH - 0.5,
+        children: wing.tagline
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(WingGallery, { wing })
+  ] });
+}
+function Rotunda() {
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("group", { children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(RotundaFloor, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(RotundaDome, {}),
+    WING_LIST.map((wingId) => /* @__PURE__ */ jsxRuntimeExports.jsx(Archway, { wing: WINGS[wingId] }, wingId))
+  ] });
+}
+const PANEL_WIDTH = 2.8;
+const PANEL_HEIGHT = 3.5;
+const REVEAL_DISTANCE = 8;
+const REVEAL_SPEED = 3;
+function CorridorPanel({
+  side,
+  zPosition,
+  title,
+  content,
+  color: color2,
+  revealDistance = REVEAL_DISTANCE
+}) {
+  const { camera } = useThree();
+  const revealedRef = reactExports.useRef(false);
+  const opacityRef = reactExports.useRef(0);
+  const [visible, setVisible] = reactExports.useState(false);
+  const x2 = side === "left" ? -CORRIDOR_WIDTH / 2 + 0.1 : CORRIDOR_WIDTH / 2 - 0.1;
+  const rotY = side === "left" ? Math.PI / 2 : -Math.PI / 2;
+  useFrame((state2, delta) => {
+    const camZ = camera.position.z;
+    if (!revealedRef.current && camZ <= zPosition + revealDistance) {
+      revealedRef.current = true;
+      setVisible(true);
+    }
+    if (visible && opacityRef.current < 1) {
+      opacityRef.current = Math.min(1, opacityRef.current + delta * REVEAL_SPEED);
+      state2.invalidate();
+    }
+  });
+  if (!visible && opacityRef.current === 0) return null;
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("group", { position: [x2, PANEL_HEIGHT / 2 + 0.3, zPosition], rotation: [0, rotY, 0], children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(HoloGlassPanel, { width: PANEL_WIDTH, height: PANEL_HEIGHT, position: [0, 0, 0], edgeColor: color2 }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HoloText,
+      {
+        position: [0, PANEL_HEIGHT / 2 - 0.4, 0.05],
+        fontSize: 0.18,
+        color: color2,
+        glowColor: color2,
+        maxWidth: PANEL_WIDTH - 0.4,
+        children: title
+      }
+    ),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      HoloText,
+      {
+        position: [0, 0, 0.05],
+        fontSize: 0.1,
+        color: "#e0f0ff",
+        glowColor: color2,
+        maxWidth: PANEL_WIDTH - 0.4,
+        children: content
+      }
+    )
+  ] });
+}
+const vertexShader = `
+  varying vec3 vWorldPos;
+  void main() {
+    vec4 wp = modelMatrix * vec4(position, 1.0);
+    vWorldPos = wp.xyz;
+    gl_Position = projectionMatrix * viewMatrix * wp;
+  }
+`;
+const fragmentShader = `
+  uniform vec3 uColor;
+  uniform float uTime;
+  varying vec3 vWorldPos;
+  void main() {
+    float gridSize = 1.5;
+    vec2 grid = abs(fract(vWorldPos.xz / gridSize - 0.5) - 0.5) / fwidth(vWorldPos.xz / gridSize);
+    float line = min(grid.x, grid.y);
+    float gridAlpha = 1.0 - min(line, 1.0);
+    float pulse = 0.8 + 0.2 * sin(uTime * 0.8 + vWorldPos.z * 0.3);
+    gl_FragColor = vec4(uColor, gridAlpha * pulse * 0.3);
+  }
+`;
+function CorridorFloor({ color: color2 }) {
+  const matRef = reactExports.useRef(null);
+  const c2 = reactExports.useMemo(() => new Color(color2), [color2]);
+  const uniforms = reactExports.useMemo(
+    () => ({
+      uColor: { value: c2 },
+      uTime: { value: 0 }
+    }),
+    [c2]
+  );
+  useFrame((state2) => {
+    if (matRef.current) matRef.current.uniforms.uTime.value = state2.clock.elapsedTime;
+  });
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("mesh", { rotation: [-Math.PI / 2, 0, 0], position: [0, 0, -CORRIDOR_LENGTH / 2], children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx("planeGeometry", { args: [CORRIDOR_WIDTH, CORRIDOR_LENGTH] }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "shaderMaterial",
+      {
+        ref: matRef,
+        vertexShader,
+        fragmentShader,
+        uniforms,
+        transparent: true,
+        depthWrite: false
+      }
+    )
+  ] });
+}
+function useCorridorContent(polymathId) {
+  const [content, setContent] = reactExports.useState(null);
+  reactExports.useEffect(() => {
+    if (!polymathId) {
+      setContent(null);
+      return;
+    }
+    window.api.corridor.getContent(polymathId).then((data) => setContent(data));
+  }, [polymathId]);
+  return content;
+}
+function Corridor({ polymathId, color: color2, direction, origin: origin2 }) {
+  const content = useCorridorContent(polymathId);
+  const wingId = getWingForPolymath(polymathId);
+  const wingColor = wingId ? WINGS[wingId].color : color2;
+  const panels = reactExports.useMemo(() => {
+    if (!content) return [];
+    return [
+      {
+        side: "left",
+        title: content.name.replace("polymathic-", "").toUpperCase(),
+        content: content.description
+      },
+      { side: "right", title: "THE KERNEL", content: content.kernel },
+      {
+        side: "left",
+        title: "IDENTITY",
+        content: content.identityTraits.join("\n\n")
+      },
+      {
+        side: "right",
+        title: `PHASE 1: ${content.phases[0]?.name ?? ""}`,
+        content: content.phases[0]?.description ?? ""
+      },
+      {
+        side: "left",
+        title: `PHASE 2: ${content.phases[1]?.name ?? ""}`,
+        content: content.phases[1]?.description ?? ""
+      },
+      {
+        side: "right",
+        title: `PHASE 3: ${content.phases[2]?.name ?? ""}`,
+        content: content.phases[2]?.description ?? ""
+      },
+      {
+        side: "left",
+        title: `PHASE 4: ${content.phases[3]?.name ?? ""}`,
+        content: content.phases[3]?.description ?? ""
+      },
+      {
+        side: "right",
+        title: "OUTPUT FORMAT",
+        content: content.outputFormat.slice(0, 400)
+      },
+      {
+        side: "left",
+        title: "DECISION GATES",
+        content: content.decisionGates.join("\n\n")
+      },
+      {
+        side: "right",
+        title: "KEY QUOTES",
+        content: content.keyQuotes.slice(0, 5).join("\n\n")
+      }
+    ];
+  }, [content]);
+  const angle = Math.atan2(direction[0], direction[2]);
+  return /* @__PURE__ */ jsxRuntimeExports.jsxs("group", { position: origin2, rotation: [0, angle, 0], children: [
+    /* @__PURE__ */ jsxRuntimeExports.jsx(CorridorFloor, { color: color2 }),
+    panels.map((panel, i2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      CorridorPanel,
+      {
+        side: panel.side,
+        zPosition: -7 * (i2 * 0.5 + 1),
+        title: panel.title,
+        content: panel.content,
+        color: wingColor
+      },
+      i2
+    ))
+  ] });
+}
 function PolymathBust({
   modelPath,
   position = [0, 0.2, 0.3],
@@ -68132,7 +68533,7 @@ WARNING: This link could potentially be dangerous`)) {
         };
       }, 3236: (e3, t3, i3) => {
         Object.defineProperty(t3, "__esModule", { value: true }), t3.Terminal = void 0;
-        const s2 = i3(3614), r2 = i3(3656), n = i3(3551), o2 = i3(9042), a2 = i3(3730), h2 = i3(1680), c2 = i3(3107), l2 = i3(5744), d = i3(2950), _ = i3(1296), u = i3(428), f = i3(4269), v = i3(5114), p2 = i3(8934), g2 = i3(3230), m2 = i3(9312), S = i3(4725), C = i3(6731), b2 = i3(8055), w = i3(8969), y = i3(8460), E2 = i3(844), k2 = i3(6114), L = i3(8437), D2 = i3(2584), R = i3(7399), x2 = i3(5941), A = i3(9074), B = i3(2585), T = i3(5435), M = i3(4567), O = i3(779);
+        const s2 = i3(3614), r2 = i3(3656), n = i3(3551), o2 = i3(9042), a2 = i3(3730), h2 = i3(1680), c2 = i3(3107), l2 = i3(5744), d = i3(2950), _ = i3(1296), u = i3(428), f = i3(4269), v = i3(5114), p2 = i3(8934), g2 = i3(3230), m2 = i3(9312), S = i3(4725), C = i3(6731), b2 = i3(8055), w = i3(8969), y = i3(8460), E2 = i3(844), k2 = i3(6114), L = i3(8437), D2 = i3(2584), R2 = i3(7399), x2 = i3(5941), A = i3(9074), B = i3(2585), T = i3(5435), M = i3(4567), O = i3(779);
         class P2 extends w.CoreTerminal {
           get onFocus() {
             return this._onFocus.event;
@@ -68376,7 +68777,7 @@ WARNING: This link could potentially be dangerous`)) {
             const t4 = this.browser.isMac && this.options.macOptionIsMeta && e4.altKey;
             if (!t4 && !this._compositionHelper.keydown(e4)) return this.options.scrollOnUserInput && this.buffer.ybase !== this.buffer.ydisp && this.scrollToBottom(), false;
             t4 || "Dead" !== e4.key && "AltGraph" !== e4.key || (this._unprocessedDeadKey = true);
-            const i4 = (0, R.evaluateKeyboardEvent)(e4, this.coreService.decPrivateModes.applicationCursorKeys, this.browser.isMac, this.options.macOptionIsMeta);
+            const i4 = (0, R2.evaluateKeyboardEvent)(e4, this.coreService.decPrivateModes.applicationCursorKeys, this.browser.isMac, this.options.macOptionIsMeta);
             if (this.updateCursorStyle(e4), 3 === i4.type || 2 === i4.type) {
               const t5 = this.rows - 1;
               return this.scrollLines(2 === i4.type ? -t5 : t5), this.cancel(e4, true);
@@ -69049,7 +69450,7 @@ WARNING: This link could potentially be dangerous`)) {
             const g2 = [], m2 = this._characterJoinerService.getJoinedCharacters(t4), S = this._themeService.colors;
             let C, b2 = e4.getNoBgTrimmedLength();
             i4 && b2 < a3 + 1 && (b2 = a3 + 1);
-            let w = 0, y = "", E2 = 0, k2 = 0, L = 0, D2 = false, R = 0, x2 = false, A = 0;
+            let w = 0, y = "", E2 = 0, k2 = 0, L = 0, D2 = false, R2 = 0, x2 = false, A = 0;
             const B = [], T = -1 !== f2 && -1 !== p2;
             for (let M = 0; M < b2; M++) {
               e4.loadCell(M, this._workCell);
@@ -69068,13 +69469,13 @@ WARNING: This link could potentially be dangerous`)) {
               }));
               let N = I.getChars() || o2.WHITESPACE_CELL_CHAR;
               if (" " === N && (I.isUnderline() || I.isOverline()) && (N = " "), A = b3 * l3 - _2.get(N, I.isBold(), I.isItalic()), C) {
-                if (w && (H && x2 || !H && !x2 && I.bg === E2) && (H && x2 && S.selectionForeground || I.fg === k2) && I.extended.ext === L && W2 === D2 && A === R && !F && !O && !U) {
+                if (w && (H && x2 || !H && !x2 && I.bg === E2) && (H && x2 && S.selectionForeground || I.fg === k2) && I.extended.ext === L && W2 === D2 && A === R2 && !F && !O && !U) {
                   I.isInvisible() ? y += o2.WHITESPACE_CELL_CHAR : y += N, w++;
                   continue;
                 }
                 w && (C.textContent = y), C = this._document.createElement("span"), w = 0, y = "";
               } else C = this._document.createElement("span");
-              if (E2 = I.bg, k2 = I.fg, L = I.extended.ext, D2 = W2, R = A, x2 = H, O && a3 >= M && a3 <= P2 && (a3 = M), !this._coreService.isCursorHidden && F && this._coreService.isCursorInitialized) {
+              if (E2 = I.bg, k2 = I.fg, L = I.extended.ext, D2 = W2, R2 = A, x2 = H, O && a3 >= M && a3 <= P2 && (a3 = M), !this._coreService.isCursorHidden && F && this._coreService.isCursorInitialized) {
                 if (B.push("xterm-cursor"), this._coreBrowserService.isFocused) h3 && B.push("xterm-cursor-blink"), B.push("bar" === s3 ? "xterm-cursor-bar" : "underline" === s3 ? "xterm-cursor-underline" : "xterm-cursor-block");
                 else if (r3) switch (r3) {
                   case "outline":
@@ -73916,21 +74317,13 @@ function Alcove({
   rotation
 }) {
   const groupRef = reactExports.useRef(null);
-  const { invalidate: invalidate2 } = useThree();
   const depth = useHallStore((s) => s.depth);
   const activePolymathId = useHallStore((s) => s.activePolymathId);
   const activeSessionId = useHallStore((s) => s.activeSessionId);
-  const navigateToAlcove = useHallStore((s) => s.navigateToAlcove);
   const enterConversation = useHallStore((s) => s.enterConversation);
   const isActive = activePolymathId === polymathId;
-  const showTerminal = isActive && (depth === "alcove" || depth === "conversation");
+  const showTerminal = isActive && depth === "alcove";
   const modelPath = POLYMATH_MODELS[polymathId];
-  const handleClick = reactExports.useCallback(() => {
-    if (isActive) return;
-    const { position: camPos, lookAt } = getAlcoveCameraTarget(ring, index);
-    navigateToAlcove(polymathId, camPos, lookAt);
-    invalidate2();
-  }, [isActive, ring, index, polymathId, navigateToAlcove, invalidate2]);
   const handleSpawnTerminal = reactExports.useCallback(async () => {
     if (activeSessionId) return;
     try {
@@ -73946,7 +74339,6 @@ function Alcove({
       ref: groupRef,
       position,
       rotation,
-      onClick: handleClick,
       children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           HoloGlassPanel,
@@ -74052,52 +74444,6 @@ function Alcove({
     }
   );
 }
-const COLOR = "#00e5ff";
-function EntranceCard() {
-  const position = ENTRANCE_POSITION;
-  const rotation = [0, ENTRANCE_ANGLE + Math.PI, 0];
-  return /* @__PURE__ */ jsxRuntimeExports.jsxs("group", { position, rotation, children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      HoloGlassPanel,
-      {
-        width: 3,
-        height: 3.6,
-        position: [0, 0, 0],
-        edgeColor: COLOR
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      HoloText,
-      {
-        position: [0, 0.6, 0.05],
-        fontSize: 0.22,
-        color: COLOR,
-        glowColor: COLOR,
-        children: "THE HALLS OF"
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      HoloText,
-      {
-        position: [0, 0.1, 0.05],
-        fontSize: 0.28,
-        color: COLOR,
-        glowColor: COLOR,
-        children: "POLYMATHICA"
-      }
-    ),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(
-      HoloText,
-      {
-        position: [0, -0.8, 0.05],
-        fontSize: 0.1,
-        color: "#8899aa",
-        glowColor: COLOR,
-        children: "ENTER THE HALL"
-      }
-    )
-  ] });
-}
 const ARRIVE_THRESHOLD = 1e-3;
 const _m = new Matrix4();
 function CameraController() {
@@ -74107,7 +74453,7 @@ function CameraController() {
   const targetLook = reactExports.useRef(new Vector3());
   const finalQuat = reactExports.useRef(new Quaternion());
   const isTransitioning = reactExports.useRef(false);
-  const prevCameraTarget = reactExports.useRef(ENTRANCE_CAMERA_POS.join(","));
+  const prevCameraTarget = reactExports.useRef(ROTUNDA_CAMERA_POS.join(","));
   const cameraTarget = useHallStore((s) => s.cameraTarget);
   const cameraLookAt = useHallStore((s) => s.cameraLookAt);
   reactExports.useEffect(() => {
@@ -74134,20 +74480,22 @@ function CameraController() {
       prevCameraTarget.current = targetKey;
     }
   }, [targetKey, cameraTarget, cameraLookAt, camera]);
+  const depth = useHallStore((s) => s.depth);
   reactExports.useEffect(() => {
-    const navigateToHall = useHallStore.getState().navigateToHall;
-    const exitConversation = useHallStore.getState().exitConversation;
     function handleKeyDown(e2) {
       if (e2.key === "Escape") {
-        const currentDepth = useHallStore.getState().depth;
-        if (currentDepth === "conversation") exitConversation();
-        else if (currentDepth === "alcove") navigateToHall();
+        const state2 = useHallStore.getState();
+        const d = state2.depth;
+        if (d === "alcove") state2.exitCorridor();
+        else if (d === "corridor") state2.exitCorridor();
+        else if (d === "wing") state2.navigateToRotunda();
       }
     }
     document.addEventListener("keydown", handleKeyDown, true);
     return () => document.removeEventListener("keydown", handleKeyDown, true);
   }, []);
   useFrame((state2, delta) => {
+    if (depth === "corridor") return;
     if (!isTransitioning.current) {
       state2.invalidate();
       return;
@@ -74188,90 +74536,183 @@ function CameraController() {
     }
   );
 }
-const DEFAULT_COLORS = [
-  "#00e5ff",
-  "#00ff88",
-  "#ff6b35",
-  "#9d4edd",
-  "#ffd700",
-  "#ff69b4",
-  "#00bfff",
-  "#ff4500",
-  "#1da1f2",
-  "#dc143c"
-];
-function HallLayout() {
+function smoothstep(t2) {
+  return t2 * t2 * (3 - 2 * t2);
+}
+function useSplineFlight(config) {
+  const progressRef = reactExports.useRef(0);
+  const completedRef = reactExports.useRef(false);
+  const curve = reactExports.useMemo(() => {
+    if (!config) return null;
+    const { start, end } = config;
+    const s = new Vector3(...start);
+    const e2 = new Vector3(...end);
+    const mid = new Vector3().lerpVectors(s, e2, 0.5);
+    mid.y += 0.5;
+    const cp1 = new Vector3().lerpVectors(s, mid, 0.5);
+    const cp2 = new Vector3().lerpVectors(mid, e2, 0.5);
+    return new CatmullRomCurve3([s, cp1, mid, cp2, e2]);
+  }, [config]);
+  function reset() {
+    progressRef.current = 0;
+    completedRef.current = false;
+  }
+  function advance2(delta) {
+    if (!curve || !config || completedRef.current) return null;
+    progressRef.current = Math.min(1, progressRef.current + delta / config.duration);
+    const t2 = smoothstep(progressRef.current);
+    const position = curve.getPointAt(t2);
+    const lookT = Math.min(1, t2 + 0.05);
+    const lookAt = curve.getPointAt(lookT);
+    if (progressRef.current >= 1) {
+      completedRef.current = true;
+    }
+    return { position, lookAt, completed: completedRef.current };
+  }
+  return { advance: advance2, reset, progressRef, completedRef };
+}
+function SplineCameraController() {
+  const { camera } = useThree();
+  const depth = useHallStore((s) => s.depth);
+  const activePolymathId = useHallStore((s) => s.activePolymathId);
+  const flightDuration = useHallStore((s) => s.corridorFlightDuration);
+  const setCorridorProgress = useHallStore((s) => s.setCorridorProgress);
+  const flightConfig = reactExports.useMemo(() => {
+    if (depth !== "corridor" || !activePolymathId) return null;
+    const wingId = getWingForPolymath(activePolymathId);
+    if (!wingId) return null;
+    const wing = WINGS[wingId];
+    const dir = new Vector3(...wing.archPosition).normalize();
+    const start = [
+      dir.x * 9,
+      1.5,
+      dir.z * 9
+    ];
+    const end = [
+      dir.x * (CORRIDOR_LENGTH - 5),
+      1.5,
+      dir.z * (CORRIDOR_LENGTH - 5)
+    ];
+    return { start, end, duration: flightDuration };
+  }, [depth, activePolymathId, flightDuration]);
+  const { advance: advance2, reset } = useSplineFlight(flightConfig);
+  const prevPolymathRef = reactExports.useRef(null);
+  reactExports.useEffect(() => {
+    if (depth === "corridor" && activePolymathId !== prevPolymathRef.current) {
+      reset();
+      prevPolymathRef.current = activePolymathId;
+    }
+  }, [depth, activePolymathId, reset]);
+  useFrame((state2, delta) => {
+    if (depth !== "corridor") return;
+    const result = advance2(delta);
+    if (!result) return;
+    camera.position.copy(result.position);
+    camera.lookAt(result.lookAt);
+    setCorridorProgress(result.completed ? 1 : 0);
+    if (result.completed) {
+      useHallStore.getState().arriveAtAlcove();
+    }
+    state2.invalidate();
+  });
+  return null;
+}
+function RotundaLayout() {
   const polymaths = useHallStore((s) => s.polymaths);
   const setPolymaths = useHallStore((s) => s.setPolymaths);
+  const depth = useHallStore((s) => s.depth);
+  const activePolymathId = useHallStore((s) => s.activePolymathId);
   const { invalidate: invalidate2 } = useThree();
   reactExports.useEffect(() => {
-    async function loadPolymaths() {
+    async function load() {
       try {
         const rows = await window.api.db.getAllPolymaths();
-        const data = rows.map((row, i2) => {
-          const ring = i2 < RING_0_COUNT ? 0 : 1;
-          const index = i2 < RING_0_COUNT ? i2 : i2 - RING_0_COUNT;
-          return {
-            id: row.id,
-            name: row.name,
-            title: row.title,
-            color: row.color,
-            totalSessions: row.total_sessions,
-            ring,
-            index
-          };
-        });
+        const data = rows.map((row, i2) => ({
+          id: row.id,
+          name: row.name,
+          title: row.title ?? "",
+          color: row.color ?? "#00e5ff",
+          totalSessions: row.total_sessions,
+          ring: i2 < RING_0_COUNT ? 0 : 1,
+          index: i2 < RING_0_COUNT ? i2 : i2 - RING_0_COUNT
+        }));
         setPolymaths(data);
         invalidate2();
       } catch (err) {
         console.error("Failed to load polymaths:", err);
       }
     }
-    loadPolymaths();
+    load();
   }, [setPolymaths, invalidate2]);
+  const activePolymath = polymaths.find((p2) => p2.id === activePolymathId);
+  const activeWingId = activePolymathId ? getWingForPolymath(activePolymathId) : null;
+  const activeWing = activeWingId ? WINGS[activeWingId] : null;
   return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
     /* @__PURE__ */ jsxRuntimeExports.jsx(CameraController, {}),
-    /* @__PURE__ */ jsxRuntimeExports.jsx(EntranceCard, {}),
-    polymaths.map((polymath) => {
-      const { position, rotation } = getAlcoveTransform(polymath.ring, polymath.index);
-      return /* @__PURE__ */ jsxRuntimeExports.jsx(
-        Alcove,
-        {
-          polymathId: polymath.id,
-          name: polymath.name,
-          title: polymath.title,
-          color: polymath.color || DEFAULT_COLORS[polymaths.indexOf(polymath) % DEFAULT_COLORS.length],
-          ring: polymath.ring,
-          index: polymath.index,
-          position,
-          rotation,
-          totalSessions: polymath.totalSessions
-        },
-        polymath.id
-      );
-    })
+    /* @__PURE__ */ jsxRuntimeExports.jsx(SplineCameraController, {}),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(Rotunda, {}),
+    activePolymath && activeWing && (depth === "corridor" || depth === "alcove") && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Corridor,
+      {
+        polymathId: activePolymath.id,
+        color: activePolymath.color,
+        direction: [activeWing.archPosition[0], 0, activeWing.archPosition[2]],
+        origin: [0, 0, 0]
+      }
+    ),
+    activePolymath && depth === "alcove" && /* @__PURE__ */ jsxRuntimeExports.jsx(
+      Alcove,
+      {
+        polymathId: activePolymath.id,
+        name: activePolymath.name,
+        title: activePolymath.title,
+        color: activePolymath.color,
+        ring: activePolymath.ring,
+        index: activePolymath.index,
+        position: getAlcoveTransform(activePolymath.ring, activePolymath.index).position,
+        rotation: getAlcoveTransform(activePolymath.ring, activePolymath.index).rotation,
+        totalSessions: activePolymath.totalSessions
+      }
+    )
   ] });
 }
 function HallHUD() {
   const depth = useHallStore((s) => s.depth);
   const activePolymathId = useHallStore((s) => s.activePolymathId);
+  const activeWing = useHallStore((s) => s.activeWing);
   const polymaths = useHallStore((s) => s.polymaths);
-  const navigateToHall = useHallStore((s) => s.navigateToHall);
-  const exitConversation = useHallStore((s) => s.exitConversation);
+  const corridorFlightDuration = useHallStore((s) => s.corridorFlightDuration);
+  const navigateToRotunda = useHallStore((s) => s.navigateToRotunda);
+  const exitCorridor = useHallStore((s) => s.exitCorridor);
+  const setCorridorFlightDuration = useHallStore((s) => s.setCorridorFlightDuration);
   const activePolymath = polymaths.find((p2) => p2.id === activePolymathId);
-  reactExports.useEffect(() => {
-    function handleKeyDown(e2) {
-      if (e2.key === "Escape") {
-        if (depth === "conversation") exitConversation();
-        else if (depth === "alcove") navigateToHall();
-      }
-    }
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [depth, navigateToHall, exitConversation]);
+  function handleBack() {
+    if (depth === "alcove" || depth === "corridor") exitCorridor();
+    else if (depth === "wing") navigateToRotunda();
+  }
+  function backLabel() {
+    if (depth === "alcove") return "BACK TO WING";
+    if (depth === "corridor") return "EXIT CORRIDOR";
+    if (depth === "wing") return "BACK TO ROTUNDA";
+    return "";
+  }
+  function instructions() {
+    if (depth === "rotunda") return "Explore the wings — Click a portrait to enter their corridor";
+    if (depth === "wing") return "Click a polymath to begin the journey";
+    if (depth === "corridor") return `Flying through ${activePolymath?.name ?? "the corridor"}...`;
+    if (depth === "alcove") return "Press ESC to return";
+    return "";
+  }
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-x-0 top-0 z-50 pointer-events-none", children: [
     /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "titlebar-drag h-8 flex items-center justify-between px-4", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs tracking-[4px] uppercase", style: { color: "#00e5ff", fontFamily: "Orbitron, monospace" }, children: "The Halls of Polymathica" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          className: "text-xs tracking-[4px] uppercase",
+          style: { color: "#00e5ff", fontFamily: "Orbitron, monospace" },
+          children: "The Halls of Polymathica"
+        }
+      ),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "titlebar-no-drag flex gap-1 pointer-events-auto", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx(
           "button",
@@ -74299,11 +74740,11 @@ function HallHUD() {
         )
       ] })
     ] }),
-    depth !== "hall" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 pt-2 pointer-events-auto", children: [
+    depth !== "rotunda" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "px-4 pt-2 pointer-events-auto", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx(
         "button",
         {
-          onClick: depth === "conversation" ? exitConversation : navigateToHall,
+          onClick: handleBack,
           onMouseDown: (e2) => e2.preventDefault(),
           className: "cursor-pointer",
           style: {
@@ -74317,36 +74758,82 @@ function HallHUD() {
             letterSpacing: "2px",
             textTransform: "uppercase"
           },
-          children: depth === "conversation" ? "BACK TO ALCOVE" : "BACK TO HALL"
+          children: backLabel()
         }
       ),
       activePolymath && /* @__PURE__ */ jsxRuntimeExports.jsx(
         "span",
         {
           className: "ml-3 text-sm",
-          style: { color: activePolymath.color || "#00e5ff", fontFamily: "Orbitron, monospace" },
+          style: {
+            color: activePolymath.color || "#00e5ff",
+            fontFamily: "Orbitron, monospace"
+          },
           children: activePolymath.name.toUpperCase()
+        }
+      ),
+      activeWing && !activePolymath && /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "span",
+        {
+          className: "ml-3 text-sm",
+          style: { color: "#8899aa", fontFamily: "Orbitron, monospace" },
+          children: activeWing.toUpperCase()
         }
       )
     ] }),
-    depth === "hall" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "fixed bottom-4 inset-x-0 flex justify-center pointer-events-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-      "div",
-      {
-        className: "px-6 py-2 rounded-full text-xs tracking-[2px] uppercase",
-        style: {
-          background: "rgba(0, 229, 255, 0.08)",
-          border: "1px solid rgba(0, 229, 255, 0.15)",
-          color: "#8899aa",
-          fontFamily: "Orbitron, monospace"
-        },
-        children: "Click a polymath to approach — Scroll to zoom — Drag to orbit"
-      }
-    ) })
+    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed bottom-4 inset-x-0 flex flex-col items-center gap-3 pointer-events-none", children: [
+      depth === "rotunda" && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-3 pointer-events-auto", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "span",
+          {
+            className: "text-xs",
+            style: { color: "#8899aa", fontFamily: "Orbitron, monospace" },
+            children: "Flight Speed"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "input",
+          {
+            type: "range",
+            min: MIN_FLIGHT_DURATION,
+            max: MAX_FLIGHT_DURATION,
+            step: 1,
+            value: corridorFlightDuration,
+            onChange: (e2) => setCorridorFlightDuration(Number(e2.target.value)),
+            className: "w-32 accent-[#00e5ff]"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs(
+          "span",
+          {
+            className: "text-xs",
+            style: { color: "#8899aa", fontFamily: "Orbitron, monospace" },
+            children: [
+              corridorFlightDuration,
+              "s"
+            ]
+          }
+        )
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          className: "px-6 py-2 rounded-full text-xs tracking-[2px] uppercase",
+          style: {
+            background: "rgba(0, 229, 255, 0.08)",
+            border: "1px solid rgba(0, 229, 255, 0.15)",
+            color: "#8899aa",
+            fontFamily: "Orbitron, monospace"
+          },
+          children: instructions()
+        }
+      )
+    ] })
   ] });
 }
 function App() {
   return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "w-full h-full relative", children: [
-    /* @__PURE__ */ jsxRuntimeExports.jsx(SpatialScene, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(HallLayout, {}) }),
+    /* @__PURE__ */ jsxRuntimeExports.jsx(SpatialScene, { children: /* @__PURE__ */ jsxRuntimeExports.jsx(RotundaLayout, {}) }),
     /* @__PURE__ */ jsxRuntimeExports.jsx(HallHUD, {})
   ] });
 }

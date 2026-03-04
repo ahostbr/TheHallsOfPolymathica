@@ -62,6 +62,23 @@ interface PolymathicaApi {
   session: {
     spawn: (polymathId: string) => Promise<string>
   }
+
+  corridor: {
+    getContent: (polymathId: string) => Promise<CorridorContentData | null>
+    getAllContent: () => Promise<Record<string, CorridorContentData>>
+  }
+}
+
+interface CorridorContentData {
+  name: string
+  description: string
+  color: string
+  kernel: string
+  identityTraits: string[]
+  phases: { name: string; description: string }[]
+  outputFormat: string
+  decisionGates: string[]
+  keyQuotes: string[]
 }
 
 interface PolymathRow {
