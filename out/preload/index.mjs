@@ -2,8 +2,8 @@ import { contextBridge, ipcRenderer, webFrame } from "electron";
 const api = {
   appInfo: {
     version: "1.0.0",
-    commitHash: "28a79a6",
-    buildDate: "2026-03-04",
+    commitHash: "589bc2a",
+    buildDate: "2026-03-13",
     electronVersion: process.versions.electron,
     nodeVersion: process.versions.node,
     platform: process.platform
